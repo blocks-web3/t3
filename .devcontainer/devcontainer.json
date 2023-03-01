@@ -10,7 +10,8 @@
         "sohamkamani.code-eol",
         "esbenp.prettier-vscode",
         "dbaeumer.vscode-eslint",
-        "yzhang.markdown-all-in-one"
+        "yzhang.markdown-all-in-one",
+        "aws-scripting-guy.cform"
       ],
       "settings": {
         "editor.formatOnSave": true,
@@ -38,6 +39,17 @@
         },
         "[typescriptreact]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[yaml]": {
+          "editor.insertSpaces": true,
+          "editor.tabSize": 2,
+          "editor.autoIndent": "keep",
+          "diffEditor.ignoreTrimWhitespace": false,
+          "editor.quickSuggestions": {
+            "other": true,
+            "comments": false,
+            "strings": true
+          }
         }
       }
     }

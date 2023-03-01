@@ -23,20 +23,3 @@ VSCodeでt3フォルダを開く
 
 CTRL + SHIT + P -> Dev Containers: Rebuild and Reopen in Container
 ```
-
-## 開発
-
-### 初回パッケージインストール
-```
-pnpm
-```
-
-### 実行
-```
-pnpm dev
-```
-
-### ビルド
-```
-pnpm build
-```
