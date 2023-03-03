@@ -40,22 +40,6 @@ export class CognitoAuthApi {
   private static COAUTH_REDIRECT_URL = "http://localhost:5173";
 
   /**
-   * ログインURLを返す
-   *
-   * @returns ログインURL
-   */
-  static loginUrl(): string {
-    const url = new URL("/login", this.COGNITO_DOMAIN);
-    url.search = new URLSearchParams({
-      client_id: this.COGNITO_CLIENT_ID,
-      response_type: "code",
-      scope: "openid",
-      redirect_url: this.COAUTH_REDIRECT_URL,
-    }).toString();
-    return url.href;
-  }
-
-  /**
    * 認証エンドポイントのURLを返す<br>
    *
    * @returns 認証エンドポイントのURL
