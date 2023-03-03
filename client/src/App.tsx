@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./App.css";
 import reactLogo from "./assets/react.svg";
+import { SessionContext } from "./auth/AuthContextProvider";
 
 function App() {
   const [count, setCount] = useState(0);
+  const [session] = useContext(SessionContext);
 
   return (
     <div className="App">
@@ -27,6 +29,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      {JSON.stringify(session.userId)}
     </div>
   );
 }
