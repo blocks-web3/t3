@@ -34,13 +34,28 @@ aws --endpoint-url=http://localstack:4566 dynamodb list-tables
 - describe table
 ```
 aws --endpoint-url=http://localstack:4566 dynamodb describe-table \
-    --table-name project
+    --table-name quarter
 ```
 
 - delete table
 ```
 aws --endpoint-url=http://localstack:4566 dynamodb delete-table \
-    --table-name todo
+    --table-name quarter
+```
+
+- put item
+```
+aws --endpoint-url=http://localstack:4566 dynamodb put-item \
+    --table-name quarter  \
+    --item \
+    '{"quarter":{"S":"2023Q1"},"propose_due_datetime":{"S":"2023-03-10"}}'
+```
+
+- delete item
+```
+aws --endpoint-url=http://localstack:4566 dynamodb delete-item \
+    --table-name quarter \
+    --key '{"quarter":{"S":"2023Q1"}}'
 ```
 
 - 参考

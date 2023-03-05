@@ -12,7 +12,7 @@ RUN sudo ./aws/install
 RUN npm install -g pnpm
 
 USER node
-WORKDIR /homde/node
+WORKDIR /workspace
 
 RUN mkdir -p -m 0755 ~/.aws
 RUN { \
