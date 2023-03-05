@@ -1,11 +1,23 @@
 version: "3"
 
 services:
-    t3-dev:
-        build:
-            context: ./t3-dev
-            dockerfile: Dockerfile
-        restart: always
-        tty: true
-        volumes:
-            - ..:/homde/node:cached
+  t3-dev:
+    build:
+      context: ./t3-dev
+      dockerfile: Dockerfile
+    restart: always
+    tty: true
+    volumes:
+      - ..:/homde/node:cached
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:1.4
+    environment:
+      SERVICES: dynamodb
+      INIT_SCRIPTS_PATH: /docker-entrypoint-initaws.d
+      DEFAULT_REGION: "ap-northeast-1"
+    ports:
+      - "4566:4566"
+    volumes:
+      - ./localstack/init:/docker-entrypoint-initaws.d
+      - ./localstack/json:/json

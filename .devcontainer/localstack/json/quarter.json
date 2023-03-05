@@ -1,0 +1,20 @@
+{
+  "KeySchema": [
+    {
+      "AttributeName": "quarter",
+      "KeyType": "HASH"
+    }
+  ],
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "quarter",
+      "AttributeType": "S"
+    }
+  ],
+  "BillingMode": "PROVISIONED",
+  "TableName": "quarter",
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 10
+  }
+}

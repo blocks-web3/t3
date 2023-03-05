@@ -1,0 +1,20 @@
+{
+  "KeySchema": [
+    {
+      "AttributeName": "wallet_address",
+      "KeyType": "HASH"
+    }
+  ],
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "wallet_address",
+      "AttributeType": "S"
+    }
+  ],
+  "BillingMode": "PROVISIONED",
+  "TableName": "user",
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 10
+  }
+}
