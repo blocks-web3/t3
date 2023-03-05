@@ -9,24 +9,6 @@ services:
     tty: true
     volumes:
       - ..:/workspace:cached
-  # localstack:
-  #   container_name: localstack
-  #   image: localstack/localstack:1.4
-  #   environment:
-  #     SERVICES: dynamodb,lambda
-  #     INIT_SCRIPTS_PATH: /docker-entrypoint-initaws.d
-  #     LOCALSTACK_HOSTNAME: localstack
-  #     DEFAULT_REGION: ap-northeast-1
-  #     AWS_DEFAULT_REGION: ap-northeast-1
-  #     DOCKER_HOST: unix:///var/run/docker.sock
-  #     LAMBDA_EXECUTOR: docker-reuse
-  #     SET_TERM_HANDLER: 1
-  #   ports:
-  #     - "4566:4566"
-  #   volumes:
-  #     - ./localstack/init:/docker-entrypoint-initaws.d
-  #     - ./localstack/json:/json
-  #     - /var/run/docker.sock:/var/run/docker.sock
   dynamodb-local:
     container_name: dynamodb-local
     image: amazon/dynamodb-local:latest
@@ -34,9 +16,5 @@ services:
     volumes:
       - ./dynamodb/data:/home/dynamodblocal/data
     ports:
-        - 8000:8000
+      - 8000:8000
     working_dir: /home/dynamodblocal
-
-# volumes:
-#   dynamodb:
-#     driver: local
