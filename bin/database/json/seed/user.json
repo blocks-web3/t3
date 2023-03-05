@@ -1,0 +1,46 @@
+{
+  "user": [
+    {
+      "PutRequest": {
+        "Item": {
+          "wallet_address": {
+            "S": "0x0001"
+          },
+          "employee_id": {
+            "S": "0101"
+          },
+          "employee_name": {
+            "S": "後藤"
+          },
+          "role": {
+            "S": "LEAD"
+          },
+          "department_name": {
+            "S": "G1"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "wallet_address": {
+            "S": "0x0002"
+          },
+          "employee_id": {
+            "S": "0102"
+          },
+          "employee_name": {
+            "S": "佐藤"
+          },
+          "role": {
+            "S": "STAFF"
+          },
+          "department_name": {
+            "S": "G2"
+          }
+        }
+      }
+    }
+  ]
+}

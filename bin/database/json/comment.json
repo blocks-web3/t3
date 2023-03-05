@@ -45,10 +45,6 @@
       }
     }
   ],
-  "BillingMode": "PROVISIONED",
-  "TableName": "comment",
-  "ProvisionedThroughput": {
-    "ReadCapacityUnits": 5,
-    "WriteCapacityUnits": 10
-  }
+  "BillingMode": "PAY_PER_REQUEST",
+  "TableName": "comment"
 }

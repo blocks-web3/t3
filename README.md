@@ -28,32 +28,38 @@ CTRL + SHIT + P -> Dev Containers: Rebuild and Reopen in Container
 ### `t3-node` container から localstack へ dynamodb コマンド
 - list tables
 ```
-aws --endpoint-url=http://localstack:4566 dynamodb list-tables
+aws --endpoint-url=http://dynamodb-local:8000 dynamodb list-tables
 ```
 
 - describe table
 ```
-aws --endpoint-url=http://localstack:4566 dynamodb describe-table \
+aws --endpoint-url=http://dynamodb-local:8000 dynamodb describe-table \
     --table-name quarter
 ```
 
 - delete table
 ```
-aws --endpoint-url=http://localstack:4566 dynamodb delete-table \
+aws --endpoint-url=http://dynamodb-local:8000 dynamodb delete-table \
     --table-name quarter
 ```
 
 - put item
 ```
-aws --endpoint-url=http://localstack:4566 dynamodb put-item \
+aws --endpoint-url=http://dynamodb-local:8000 dynamodb put-item \
     --table-name quarter  \
     --item \
     '{"quarter":{"S":"2023Q1"},"propose_due_datetime":{"S":"2023-03-10"}}'
 ```
 
+- scan
+```
+aws --endpoint-url=http://dynamodb-local:8000 dynamodb scan \
+    --table-name quarter
+```
+
 - delete item
 ```
-aws --endpoint-url=http://localstack:4566 dynamodb delete-item \
+aws --endpoint-url=http://dynamodb-local:8000 dynamodb delete-item \
     --table-name quarter \
     --key '{"quarter":{"S":"2023Q1"}}'
 ```

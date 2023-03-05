@@ -1,0 +1,88 @@
+{
+  "quarter": [
+    {
+      "PutRequest": {
+        "Item": {
+          "quarter": {
+            "S": "2023Q1"
+          },
+          "propose_due_datetime": {
+            "S": "2023-03-10T23:59:59.999Z"
+          },
+          "vote_due_datetime": {
+            "S": "2023-03-12T23:59:59.999Z"
+          },
+          "implement_due_datetime": {
+            "S": "2023-03-14T23:59:59.999Z"
+          },
+          "evaluate_due_datetime": {
+            "S": "2023-03-16T23:59:59.999Z"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "quarter": {
+            "S": "2023Q2"
+          },
+          "propose_due_datetime": {
+            "S": "2023-06-10T23:59:59.999Z"
+          },
+          "vote_due_datetime": {
+            "S": "2023-06-12T23:59:59.999Z"
+          },
+          "implement_due_datetime": {
+            "S": "2023-06-14T23:59:59.999Z"
+          },
+          "evaluate_due_datetime": {
+            "S": "2023-06-16T23:59:59.999Z"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "quarter": {
+            "S": "2023Q3"
+          },
+          "propose_due_datetime": {
+            "S": "2023-09-10T23:59:59.999Z"
+          },
+          "vote_due_datetime": {
+            "S": "2023-09-12T23:59:59.999Z"
+          },
+          "implement_due_datetime": {
+            "S": "2023-09-14T23:59:59.999Z"
+          },
+          "evaluate_due_datetime": {
+            "S": "2023-09-16T23:59:59.999Z"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "quarter": {
+            "S": "2023Q4"
+          },
+          "propose_due_datetime": {
+            "S": "2023-12-10T23:59:59.999Z"
+          },
+          "vote_due_datetime": {
+            "S": "2023-12-12T23:59:59.999Z"
+          },
+          "implement_due_datetime": {
+            "S": "2023-12-14T23:59:59.999Z"
+          },
+          "evaluate_due_datetime": {
+            "S": "2023-12-16T23:59:59.999Z"
+          }
+        }
+      }
+    }
+  ]
+}
