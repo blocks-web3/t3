@@ -2,7 +2,7 @@
   "name": "t3",
   "dockerComposeFile": "docker-compose.yml",
   "service": "t3-dev",
-  "workspaceFolder": "/homde/node",
+  "workspaceFolder": "/workspace",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -11,7 +11,10 @@
         "esbenp.prettier-vscode",
         "dbaeumer.vscode-eslint",
         "yzhang.markdown-all-in-one",
-        "aws-scripting-guy.cform"
+        "aws-scripting-guy.cform",
+        "eamodio.gitlens",
+        "mhutchie.git-graph",
+        "donjayamanne.githistory"
       ],
       "settings": {
         "editor.formatOnSave": true,

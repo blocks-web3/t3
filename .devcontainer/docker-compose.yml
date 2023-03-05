@@ -1,11 +1,20 @@
 version: "3"
 
 services:
-    t3-dev:
-        build:
-            context: ./t3-dev
-            dockerfile: Dockerfile
-        restart: always
-        tty: true
-        volumes:
-            - ..:/homde/node:cached
+  t3-dev:
+    build:
+      context: ./t3-dev
+      dockerfile: Dockerfile
+    restart: always
+    tty: true
+    volumes:
+      - ..:/workspace:cached
+  dynamodb-local:
+    container_name: dynamodb-local
+    image: amazon/dynamodb-local:latest
+    command: -jar DynamoDBLocal.jar -sharedDb -dbPath ./data -optimizeDbBeforeStartup
+    volumes:
+      - ./dynamodb/data:/home/dynamodblocal/data
+    ports:
+      - 8000:8000
+    working_dir: /home/dynamodblocal

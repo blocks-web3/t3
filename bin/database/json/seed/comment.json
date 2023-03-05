@@ -1,0 +1,58 @@
+{
+  "comment": [
+    {
+      "PutRequest": {
+        "Item": {
+          "comment_id": {
+            "S": "1"
+          },
+          "project_id": {
+            "S": "1"
+          },
+          "created_at": {
+            "S": "2023-03-10T10:00:00.000Z"
+          },
+          "updated_at": {
+            "S": "2023-03-10T10:00:00.000Z"
+          },
+          "comment": {
+            "S": "いいですね。"
+          },
+          "author_address": {
+            "S": "0x0002"
+          },
+          "author_name": {
+            "S": "佐藤"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "comment_id": {
+            "S": "2"
+          },
+          "project_id": {
+            "S": "1"
+          },
+          "created_at": {
+            "S": "2023-03-12T10:00:00.000Z"
+          },
+          "updated_at": {
+            "S": "2023-03-12T10:00:00.000Z"
+          },
+          "comment": {
+            "S": "めちゃくちゃいいですね。"
+          },
+          "author_address": {
+            "S": "0x0002"
+          },
+          "author_name": {
+            "S": "佐藤"
+          }
+        }
+      }
+    }
+  ]
+}

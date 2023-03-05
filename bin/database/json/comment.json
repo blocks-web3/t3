@@ -1,0 +1,50 @@
+{
+  "KeySchema": [
+    {
+      "AttributeName": "comment_id",
+      "KeyType": "HASH"
+    },
+    {
+      "AttributeName": "project_id",
+      "KeyType": "RANGE"
+    }
+  ],
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "comment_id",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "project_id",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "created_at",
+      "AttributeType": "S"
+    }
+  ],
+  "GlobalSecondaryIndexes": [
+    {
+      "IndexName": "ProjectID-CreatedAt-Index",
+      "KeySchema": [
+        {
+          "AttributeName": "project_id",
+          "KeyType": "HASH"
+        },
+        {
+          "AttributeName": "created_at",
+          "KeyType": "RANGE"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 5,
+        "WriteCapacityUnits": 10
+      }
+    }
+  ],
+  "BillingMode": "PAY_PER_REQUEST",
+  "TableName": "comment"
+}
