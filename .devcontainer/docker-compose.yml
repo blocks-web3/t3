@@ -12,7 +12,7 @@ services:
   dynamodb-local:
     container_name: dynamodb-local
     image: amazon/dynamodb-local:latest
-    command: -jar DynamoDBLocal.jar -sharedDb -dbPath ./data -optimizeDbBeforeStartup
+    command: -jar DynamoDBLocal.jar -sharedDb -cors 'http://localhost:5173' -dbPath ./data -optimizeDbBeforeStartup
     volumes:
       - ./dynamodb/data:/home/dynamodblocal/data
     ports:
