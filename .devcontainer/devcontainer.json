@@ -14,7 +14,8 @@
         "aws-scripting-guy.cform",
         "eamodio.gitlens",
         "mhutchie.git-graph",
-        "donjayamanne.githistory"
+        "donjayamanne.githistory",
+        "streetsidesoftware.code-spell-checker"
       ],
       "settings": {
         "editor.formatOnSave": true,
@@ -41,6 +42,9 @@
           "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
         "[typescriptreact]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[html]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
         "[yaml]": {

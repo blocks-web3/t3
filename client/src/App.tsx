@@ -1,7 +1,8 @@
 import { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import { SessionContext } from "./auth/AuthContextProvider";
+import { CognitoAuthApi } from "./auth/auth-api";
+import { clearSession, SessionContext } from "./auth/AuthContextProvider";
 import CreatePost from "./views/pages/project/CreatePost";
 import ProjectDetails from "./views/pages/project/ProjectDetails";
 import ProjectList from "./views/pages/project/ProjectList";
@@ -10,6 +11,11 @@ import VoteHistory from "./views/pages/user/mypage/VoteHistory";
 
 function App() {
   const [session] = useContext(SessionContext);
+
+  function onLogout() {
+    clearSession();
+    location.assign(CognitoAuthApi.logoutUrl());
+  }
 
   return (
     <div className="App">
@@ -26,7 +32,9 @@ function App() {
           <Route path="vote-history" element={<VoteHistory />} />
         </Route>
       </Routes>
-      {JSON.stringify(session.userId)}
+      <button onClick={onLogout}>logout</button>
+      <p>userId:{session?.userId}</p>
+      <p>address: {session?.address}</p>
     </div>
   );
 }
