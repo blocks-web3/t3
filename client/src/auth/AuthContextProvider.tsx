@@ -1,5 +1,5 @@
 import { JwtPayload } from "jwt-decode";
-import React, { PropsWithChildren, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CognitoAuthApi } from "./auth-api";
 
@@ -51,12 +51,34 @@ export const SessionContext = React.createContext<[Session | null]>([null]);
 /**
  * コンテキストのProvider
  */
-export const AuthContextProvider: React.FC<PropsWithChildren<{}>> = ({
+export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [session, setSession] = useState<Session | null>(getDefaultSession());
   const [searchParams, setSearchParams] = useSearchParams();
   const code = searchParams.get("code");
+
+  const initiateSession = useCallback(
+    async (code: string) => {
+      try {
+        const session = await CognitoAuthApi.initiateSession(code);
+        initSession(session);
+      } finally {
+        setSearchParams({});
+      }
+    },
+    [setSearchParams]
+  );
+
+  const refreshSession = useCallback(async (refreshToken: string) => {
+    try {
+      const session = await CognitoAuthApi.refreshSession(refreshToken);
+      initSession(session);
+    } catch (error) {
+      initSession(null);
+      throw error;
+    }
+  }, []);
 
   // sessionのバリデーション
   useEffect(() => {
@@ -73,26 +95,7 @@ export const AuthContextProvider: React.FC<PropsWithChildren<{}>> = ({
     } else if (isExpired(session)) {
       refreshSession(session.token.refreshToken);
     }
-  }, [session]);
-
-  async function initiateSession(code: string) {
-    try {
-      const session = await CognitoAuthApi.initiateSession(code);
-      initSession(session);
-    } finally {
-      setSearchParams({});
-    }
-  }
-
-  async function refreshSession(refreshToken: string) {
-    try {
-      const session = await CognitoAuthApi.refreshSession(refreshToken);
-      initSession(session);
-    } catch (error) {
-      initSession(null);
-      throw error;
-    }
-  }
+  }, [code, initiateSession, refreshSession, session]);
 
   function initSession(session: Session | null) {
     console.log(`init session.session.userId:${JSON.stringify(session)}`);

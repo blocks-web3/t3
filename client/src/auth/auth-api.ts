@@ -99,6 +99,7 @@ export class CognitoAuthApi {
     return this.createSession(
       cognitoToken,
       cognitoToken.data.refresh_token,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       credentials!
     );
   }
@@ -142,13 +143,10 @@ export class CognitoAuthApi {
 
   static async getStsCredential(idToken: string): Promise<StsCredentials> {
     // const Logins = {
-    //   "cognito-idp.ap-northeast-1.amazonaws.com/ap-northeast-1_FXv0sxdJ0":
-    //     idToken,
-    // };
-    // const Logins = {
     //   "cognito-idp.{region}.amazonaws.com/{userpool-id}":
     //     idToken,
     // };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const Logins = {} as any;
     Logins[import.meta.env.VITE_COGNITO_IDP_KEY] = idToken;
     const getIdCommand = new GetIdCommand({
@@ -160,6 +158,7 @@ export class CognitoAuthApi {
 
     const getCredentialsForIdentityCommand =
       new GetCredentialsForIdentityCommand({
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         IdentityId: result1.IdentityId!,
         Logins,
       });
@@ -167,9 +166,13 @@ export class CognitoAuthApi {
       getCredentialsForIdentityCommand
     );
     return {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       accessKeyId: result2.Credentials!.AccessKeyId!,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       secretAccessKey: result2.Credentials!.SecretKey!,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       sessionToken: result2.Credentials!.SessionToken!,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       expiration: result2.Credentials!.Expiration!,
     };
   }
