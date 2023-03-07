@@ -1,34 +1,31 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import reactLogo from "./assets/react.svg";
 import { SessionContext } from "./auth/AuthContextProvider";
+import CreatePost from "./views/pages/project/CreatePost";
+import ProjectDetails from "./views/pages/project/ProjectDetails";
+import ProjectList from "./views/pages/project/ProjectList";
+import Mypage from "./views/pages/user/Mypage";
+import VoteHistory from "./views/pages/user/mypage/VoteHistory";
 
 function App() {
-  const [count, setCount] = useState(0);
   const [session] = useContext(SessionContext);
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Routes>
+        <Route path="project">
+          <Route path="create-post" element={<CreatePost />} />
+          <Route path="list" element={<ProjectList />} />
+          <Route path="details">
+            <Route path=":projectId" element={<ProjectDetails />} />
+          </Route>
+        </Route>
+        <Route path="mypage">
+          <Route path="" element={<Mypage />} />
+          <Route path="vote-history" element={<VoteHistory />} />
+        </Route>
+      </Routes>
       {JSON.stringify(session.userId)}
     </div>
   );
