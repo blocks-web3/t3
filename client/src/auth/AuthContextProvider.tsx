@@ -60,12 +60,9 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const initiateSession = useCallback(
     async (code: string) => {
-      try {
-        const session = await CognitoAuthApi.initiateSession(code);
-        initSession(session);
-      } finally {
-        setSearchParams({});
-      }
+      const session = await CognitoAuthApi.initiateSession(code);
+      initSession(session);
+      setSearchParams({});
     },
     [setSearchParams]
   );
@@ -80,28 +77,28 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, []);
 
-  // sessionのバリデーション
   useEffect(() => {
-    // sessionに正しく値がセットされているかどうかをチェック
-    console.log(
-      `check session. code:${code}, session.userId:${JSON.stringify(
-        session?.userId
-      )}`
-    );
+    if (session && !isExpired(session)) {
+      //sessionが期限切れでないなら処理なし
+      return;
+    }
     if (code) {
       initiateSession(code);
-    } else if (!session) {
-      location.assign(CognitoAuthApi.authorizeUrl());
-    } else if (isExpired(session)) {
+    } else if (session) {
       refreshSession(session.token.refreshToken);
     }
   }, [code, initiateSession, refreshSession, session]);
 
-  function initSession(session: Session | null) {
-    console.log(`init session.session.userId:${JSON.stringify(session)}`);
+  useEffect(() => {
+    if (!code && !session) {
+      // ログイン中でなければCognitoエンドポイントへリダイレクト
+      location.assign(CognitoAuthApi.authorizeUrl());
+    }
+  }, [code, session]);
 
-    setSession(session);
+  function initSession(session: Session | null) {
     setAutoInfoToLocalStorage(session);
+    setSession(session);
   }
 
   return (
