@@ -14,7 +14,8 @@
         "aws-scripting-guy.cform",
         "eamodio.gitlens",
         "mhutchie.git-graph",
-        "donjayamanne.githistory"
+        "donjayamanne.githistory",
+        "styled-components.vscode-styled-components"
       ],
       "settings": {
         "editor.formatOnSave": true,
