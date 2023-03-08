@@ -1,0 +1,6 @@
+ASTAR
+Avenir
+cognitoidentity
+givenname
+Mypage
+userpool

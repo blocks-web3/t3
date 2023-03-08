@@ -15,7 +15,8 @@
         "eamodio.gitlens",
         "mhutchie.git-graph",
         "donjayamanne.githistory",
-        "styled-components.vscode-styled-components"
+        "styled-components.vscode-styled-components",
+        "streetsidesoftware.code-spell-checker"
       ],
       "settings": {
         "editor.formatOnSave": true,
@@ -42,6 +43,9 @@
           "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
         "[typescriptreact]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[html]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
         "[yaml]": {
