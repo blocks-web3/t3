@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getProjects } from "../../../api/project";
 import { Project } from "../../../api/types/model";
+import ProjectCard from "../../components/ProjectICard";
 
 const ProjectList: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>();
@@ -11,8 +12,9 @@ const ProjectList: React.FC = () => {
   }, []);
   return (
     <div>
-      ProjectList
-      <div>{JSON.stringify(projects)}</div>
+      {projects?.map((project, index) => {
+        return <ProjectCard key={index} project={project} />;
+      })}
     </div>
   );
 };

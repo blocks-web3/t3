@@ -1,5 +1,5 @@
 import { JwtPayload } from "jwt-decode";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CognitoAuthApi } from "./auth-api";
 
@@ -47,6 +47,11 @@ export interface CognitoIdToken extends JwtPayload {
 
 // 認証情報と認証情報セットのContext
 export const SessionContext = React.createContext<[Session | null]>([null]);
+
+export const useSession = () => {
+  const [session] = useContext(SessionContext);
+  return { session };
+};
 
 /**
  * コンテキストのProvider
