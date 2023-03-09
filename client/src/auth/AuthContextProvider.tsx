@@ -98,8 +98,7 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
       // セッション確率ずみでURLにcodeが残っていればそれは削除
       setSearchParams({});
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [code, session]);
+  }, [code, session, setSearchParams]);
 
   function initSession(session: Session | null) {
     setAutoInfoToLocalStorage(session);
