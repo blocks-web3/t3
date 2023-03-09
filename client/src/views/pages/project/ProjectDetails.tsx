@@ -1,14 +1,12 @@
-import { AttributeValue } from "@aws-sdk/client-dynamodb";
 import { useEffect, useState } from "react";
-import { getProjectByID } from "../../../api/GetProjectByID";
+import { getProjectByID } from "../../../api/project";
+import { Project } from "../../../api/types/model";
 
 const ProjectDetails: React.FC = () => {
-  const [project, setProject] = useState<
-    Record<string, AttributeValue>[] | undefined
-  >(undefined);
+  const [project, setProject] = useState<Project>();
   useEffect(() => {
-    getProjectByID("1").then((project) => {
-      setProject(project);
+    getProjectByID("1").then((projects) => {
+      setProject(projects ? projects[0] : undefined);
     });
   }, []);
   return (

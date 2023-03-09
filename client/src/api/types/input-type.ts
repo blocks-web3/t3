@@ -13,3 +13,18 @@ export const createGetProjectByIDInput = (
     },
   };
 };
+
+export const getProjectsInput: QueryCommandInput = {
+  TableName: "project",
+  IndexName: "Type-CreatedAt-Index",
+  ScanIndexForward: false,
+  KeyConditionExpression: "#type = :type",
+  ExpressionAttributeValues: {
+    ":type": {
+      S: "pj",
+    },
+  },
+  ExpressionAttributeNames: {
+    "#type": "type",
+  },
+};
