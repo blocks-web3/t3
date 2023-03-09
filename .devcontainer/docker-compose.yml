@@ -19,3 +19,4 @@ services:
     ports:
       - 8000:8000
     working_dir: /home/dynamodblocal
+    restart: always

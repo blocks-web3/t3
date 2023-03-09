@@ -63,17 +63,10 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const [searchParams, setSearchParams] = useSearchParams();
   const code = searchParams.get("code");
 
-  const initiateSession = useCallback(
-    async (code: string) => {
-      try {
-        const session = await CognitoAuthApi.initiateSession(code);
-        initSession(session);
-      } finally {
-        setSearchParams({});
-      }
-    },
-    [setSearchParams]
-  );
+  const initiateSession = useCallback(async (code: string) => {
+    const session = await CognitoAuthApi.initiateSession(code);
+    initSession(session);
+  }, []);
 
   const refreshSession = useCallback(async (refreshToken: string) => {
     try {
@@ -101,7 +94,11 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!code && !session) {
       // ログイン中でなければCognitoエンドポイントへリダイレクト
       location.assign(CognitoAuthApi.authorizeUrl());
+    } else if (code && session) {
+      // セッション確率ずみでURLにcodeが残っていればそれは削除
+      setSearchParams({});
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code, session]);
 
   function initSession(session: Session | null) {
@@ -140,6 +137,10 @@ function getDefaultSession(): Session | null {
  * @param session
  */
 function setAutoInfoToLocalStorage(session: Session | null): void {
+  if (!session) {
+    window.localStorage.removeItem("session");
+    return;
+  }
   const sessionStringify = JSON.stringify(session);
   window.localStorage.setItem("session", sessionStringify);
 }
