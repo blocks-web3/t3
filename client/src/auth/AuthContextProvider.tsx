@@ -65,9 +65,12 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const initiateSession = useCallback(
     async (code: string) => {
-      const session = await CognitoAuthApi.initiateSession(code);
-      initSession(session);
-      setSearchParams({});
+      try {
+        const session = await CognitoAuthApi.initiateSession(code);
+        initSession(session);
+      } finally {
+        setSearchParams({});
+      }
     },
     [setSearchParams]
   );

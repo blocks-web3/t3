@@ -1,5 +1,6 @@
 ASTAR
 Avenir
+bignumber
 cognitoidentity
 givenname
 Mypage
