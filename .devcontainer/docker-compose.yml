@@ -6,6 +6,7 @@ services:
       context: ./t3-dev
       dockerfile: Dockerfile
     restart: always
+    platform: linux/x86_64
     tty: true
     volumes:
       - ..:/workspace:cached
