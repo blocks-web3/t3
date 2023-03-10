@@ -24,6 +24,7 @@
           "source.organizeImports": true
         },
         "editor.bracketPairColorization.enabled": true,
+        "yaml.maxItemsComputed": 10000,
         "files.watcherExclude": {
           "**/.git/objects/**": true,
           "**/.git/subtree-cache/**": true,
