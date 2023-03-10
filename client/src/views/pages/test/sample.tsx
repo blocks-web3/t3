@@ -5,13 +5,13 @@ import {
   clearSession,
   SessionContext,
 } from "../../../auth/AuthContextProvider";
-import { LoadingView } from "../../../component/LoadingView";
 import {
   displayEtherFromWei,
   etherToWei,
   getSigner,
   sendNativeToken,
 } from "../../../wallet/wallet-util";
+import { LoadingMask } from "../../components/LoadingMask";
 
 export default function Sample() {
   const [session] = useContext(SessionContext);
@@ -59,7 +59,7 @@ export default function Sample() {
   }, [getBalance, getGasPrice]);
 
   if (!session) {
-    return <LoadingView></LoadingView>;
+    return <LoadingMask></LoadingMask>;
   }
   return (
     <>
