@@ -9,6 +9,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
@@ -92,10 +93,23 @@ export default function SideMenu(props: Props) {
     <div
       css={css`
         width: 100%;
+        text-align: center;
       `}
     >
       <Toolbar sx={{ minHeight: { sm: "96px" } }} />
       <Divider />
+      <Button
+        variant="contained"
+        size="large"
+        css={css`
+          margin: 1rem auto;
+          width: 80%;
+          font-size: 1.25rem;
+        `}
+        onClick={() => navigate("/project/create-post")}
+      >
+        New Project
+      </Button>
       <List>
         {menus.map(({ text, to, icon }, index) => (
           <ListItem key={index} disablePadding sx={{ height: "72px" }}>
@@ -244,9 +258,9 @@ export default function SideMenu(props: Props) {
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
+          marginTop: { sm: "96px" },
         }}
       >
-        <Toolbar sx={{ minHeight: { sm: "96px" } }} />
         {children}
       </Box>
     </Box>
