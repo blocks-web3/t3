@@ -14,6 +14,8 @@ RUN npm install -g pnpm
 USER node
 WORKDIR /workspace
 
+RUN git config --global --add safe.directory /workspace
+
 RUN mkdir -p -m 0755 ~/.aws
 RUN { \
   echo "[default]"; \

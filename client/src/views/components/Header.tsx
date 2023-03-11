@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { CognitoAuthApi } from "../../auth/auth-api";
-import { clearSession } from "../../auth/AuthContextProvider";
+import { clearSession } from "../../auth/AuthContext";
 
 export default function Header() {
   const [auth, setAuth] = React.useState(true);

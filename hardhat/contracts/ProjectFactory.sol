@@ -10,7 +10,7 @@ contract ProjectFactory is Ownable {
 
     event ProjectCreated(
         address indexed owner,
-        string projectId,
+        string indexed projectId,
         address projectAddress
     );
 
@@ -27,5 +27,9 @@ contract ProjectFactory is Ownable {
 
         emit ProjectCreated(_msgSender(), _id, _address);
         return _address;
+    }
+
+    function getProjectAddress(string calldata projectId) external view returns (address){
+        return projects[projectId];
     }
 }

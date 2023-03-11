@@ -26,7 +26,7 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CognitoAuthApi } from "../../auth/auth-api";
-import { clearSession, useSession } from "../../auth/AuthContextProvider";
+import { clearSession, useSession } from "../../auth/AuthContext";
 
 const drawerWidth = 354;
 

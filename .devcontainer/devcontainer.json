@@ -16,7 +16,9 @@
         "mhutchie.git-graph",
         "donjayamanne.githistory",
         "styled-components.vscode-styled-components",
-        "streetsidesoftware.code-spell-checker"
+        "streetsidesoftware.code-spell-checker",
+        "JuanBlanco.solidity",
+        "NomicFoundation.hardhat-solidity"
       ],
       "settings": {
         "editor.formatOnSave": true,

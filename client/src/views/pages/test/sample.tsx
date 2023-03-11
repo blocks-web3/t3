@@ -1,10 +1,7 @@
-import { ethers } from "ethers";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { BigNumber } from "ethers";
+import { useCallback, useEffect, useState } from "react";
 import { CognitoAuthApi } from "../../../auth/auth-api";
-import {
-  clearSession,
-  SessionContext,
-} from "../../../auth/AuthContextProvider";
+import { clearSession, useSession } from "../../../auth/AuthContext";
 import {
   displayEtherFromWei,
   etherToWei,
@@ -14,9 +11,9 @@ import {
 import { LoadingMask } from "../../components/LoadingMask";
 
 export default function Sample() {
-  const [session] = useContext(SessionContext);
-  const [balance, setBalance] = useState<ethers.BigNumber | null>();
-  const [gasPrice, setGasPrice] = useState<ethers.BigNumber | null>();
+  const { session } = useSession();
+  const [balance, setBalance] = useState<BigNumber | null>();
+  const [gasPrice, setGasPrice] = useState<BigNumber | null>();
   const [inputToAddress, setInputToAddress] = useState<string>("");
   const [inputSendValue, setInputSendValue] = useState<string>("");
 
