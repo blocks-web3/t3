@@ -4,54 +4,18 @@ import Box from "@mui/material/Box";
 import grey from "@mui/material/colors/grey";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { getCommentsByProjectId } from "../../../api/comment";
 import { getProjectByID, getProjectMembersByID } from "../../../api/project";
-import { Member, Project } from "../../../api/types/model";
+import { Comment, Member, Project } from "../../../api/types/model";
+import TabPanel from "../../components/atoms/TabPanel";
 import EvaluationTab from "../../components/EvaluationTab";
 import MainContainer from "../../components/MainContainer";
 import ProjectDetailsTab from "../../components/ProjectDetailsTab";
 import ProjectOutcomeTab from "../../components/ProjectOutcomeTab";
 import VoteTab from "../../components/VoteTab";
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-  title: string;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, title, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography
-            variant="h4"
-            align="left"
-            css={css`
-              margin: 2rem 0;
-              width: 100%;
-            `}
-          >
-            {title}
-          </Typography>
-          {children}
-        </Box>
-      )}
-    </div>
-  );
-}
 
 const tabs = [
   {
@@ -79,16 +43,24 @@ const tabs = [
 const ProjectDetails: React.FC = () => {
   const [project, setProject] = useState<Project>();
   const [members, setMembers] = useState<Member[]>();
+  const [comments, setComments] = useState<Comment[]>();
   const { projectId } = useParams();
+
   useEffect(() => {
     if (!projectId) return;
 
     const fetch = async () => {
-      const project = await getProjectByID(projectId);
-      const members = await getProjectMembersByID(projectId);
+      const [project, members, comments] = await Promise.all([
+        getProjectByID(projectId),
+        getProjectMembersByID(projectId),
+        getCommentsByProjectId(projectId),
+      ]);
+
       setProject(project);
       setMembers(members);
+      setComments(comments);
     };
+
     fetch();
   }, [projectId]);
 
@@ -133,7 +105,11 @@ const ProjectDetails: React.FC = () => {
           </Tabs>
         </Box>
         <TabPanel value={value} index={0} title="Project Details">
-          <ProjectDetailsTab project={project} members={members} />
+          <ProjectDetailsTab
+            project={project}
+            members={members}
+            comments={comments}
+          />
         </TabPanel>
         <TabPanel value={value} index={1} title="Vote Result">
           <VoteTab />
