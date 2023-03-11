@@ -19,6 +19,14 @@ export interface Project {
   status: string;
   proposal?: Proposal;
   result?: Result;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Member {
+  project_member_address: string;
+  type: string;
+  member_name: string;
+  project_id: string;
+  member_role: string;
 }

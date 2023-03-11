@@ -165,7 +165,7 @@ export default function SideMenu(props: Props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h4" noWrap component="div">
+          <Typography variant="h2" noWrap component="div">
             {title ?? ""}
           </Typography>
           <div
