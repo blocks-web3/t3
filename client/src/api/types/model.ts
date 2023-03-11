@@ -37,3 +37,13 @@ export interface User {
   wallet_address: string;
   employee_name: string;
 }
+
+export interface Comment {
+  comment_id: string;
+  project_id: string;
+  author_name: string;
+  author_address: string;
+  comment: string;
+  created_at: string;
+  updated_at?: string;
+}

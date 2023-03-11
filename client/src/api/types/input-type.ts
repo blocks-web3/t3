@@ -1,4 +1,9 @@
-import { QueryCommandInput, ScanCommandInput } from "@aws-sdk/client-dynamodb";
+import {
+  AttributeValue,
+  PutItemCommandInput,
+  QueryCommandInput,
+  ScanCommandInput,
+} from "@aws-sdk/client-dynamodb";
 
 export const createGetProjectByIDInput = (
   projectId: string
@@ -51,5 +56,33 @@ export const getUsersInput = (): ScanCommandInput => {
   return {
     TableName: "user",
     Limit: 150,
+  };
+};
+
+export const getCommentsByProjectIdInput = (
+  projectId: string
+): QueryCommandInput => {
+  return {
+    TableName: "comment",
+    IndexName: "ProjectID-CreatedAt-Index",
+    ScanIndexForward: false,
+    KeyConditionExpression: "#project_id = :project_id",
+    ExpressionAttributeValues: {
+      ":project_id": {
+        S: projectId,
+      },
+    },
+    ExpressionAttributeNames: {
+      "#project_id": "project_id",
+    },
+  };
+};
+
+export const createCommentInput = (
+  item: Record<string, AttributeValue>
+): PutItemCommandInput => {
+  return {
+    TableName: "comment",
+    Item: item,
   };
 };

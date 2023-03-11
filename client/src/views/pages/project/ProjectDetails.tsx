@@ -4,54 +4,17 @@ import Box from "@mui/material/Box";
 import grey from "@mui/material/colors/grey";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getProjectByID, getProjectMembersByID } from "../../../api/project";
 import { Member, Project } from "../../../api/types/model";
+import TabPanel from "../../components/atoms/TabPanel";
 import EvaluationTab from "../../components/EvaluationTab";
 import MainContainer from "../../components/MainContainer";
 import ProjectDetailsTab from "../../components/ProjectDetailsTab";
 import ProjectOutcomeTab from "../../components/ProjectOutcomeTab";
 import VoteTab from "../../components/VoteTab";
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-  title: string;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, title, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography
-            variant="h4"
-            align="left"
-            css={css`
-              margin: 2rem 0;
-              width: 100%;
-            `}
-          >
-            {title}
-          </Typography>
-          {children}
-        </Box>
-      )}
-    </div>
-  );
-}
 
 const tabs = [
   {
@@ -80,12 +43,16 @@ const ProjectDetails: React.FC = () => {
   const [project, setProject] = useState<Project>();
   const [members, setMembers] = useState<Member[]>();
   const { projectId } = useParams();
+
   useEffect(() => {
     if (!projectId) return;
 
     const fetch = async () => {
-      const project = await getProjectByID(projectId);
-      const members = await getProjectMembersByID(projectId);
+      const [project, members] = await Promise.all([
+        getProjectByID(projectId),
+        getProjectMembersByID(projectId),
+      ]);
+
       setProject(project);
       setMembers(members);
     };
