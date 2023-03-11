@@ -1,10 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import { css, SerializedStyles } from "@emotion/react";
+import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import grey from "@mui/material/colors/grey";
 import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { useEffect, useState } from "react";
+import {
+  CommentInput,
+  createComment,
+  getCommentsByProjectId,
+} from "../../api/comment";
 import { Comment, Member, Project } from "../../api/types/model";
+import { useSession } from "../../auth/AuthContext";
 import {
   formatIsoString,
   formatIsoStringWithTime,
@@ -15,11 +24,41 @@ import HiddenText from "./atoms/HiddenText";
 interface Props {
   project: Project | undefined;
   members: Member[] | undefined;
-  comments: Comment[] | undefined;
 }
 
 const ProjectDetailsTab = (props: Props) => {
-  const { project, members, comments } = props;
+  const { project, members } = props;
+  const [commentInput, setCommentInput] = useState("");
+  const [comments, setComments] = useState<Comment[]>([]);
+
+  useEffect(() => {
+    if (!project) return;
+    const fetch = async () => {
+      const comments = await getCommentsByProjectId(project!.project_id);
+      if (!comments) return;
+      setComments(comments);
+    };
+    fetch();
+  }, [project]);
+
+  const onChangeComment = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setCommentInput(value);
+  };
+
+  const { session } = useSession();
+
+  const onSubmit = async () => {
+    const req: CommentInput = {
+      projectId: project!.project_id,
+      session: session!,
+      comment: commentInput,
+    };
+    const data = await createComment(req);
+    if (!data) return;
+    setComments((prev) => [data, ...prev]);
+    setCommentInput("");
+  };
 
   return (
     <>
@@ -88,6 +127,31 @@ const ProjectDetailsTab = (props: Props) => {
         {comments?.map((comment) => {
           return <CommentItem key={comment.comment_id} comment={comment} />;
         })}
+        <form action="submit">
+          <TextField
+            defaultValue={""}
+            onChange={onChangeComment}
+            value={commentInput}
+            placeholder="Add comment..."
+            multiline
+            minRows={4}
+            maxRows={Infinity}
+            fullWidth
+            css={css`
+              margin: 1rem auto;
+            `}
+          />
+          <div
+            css={css`
+              display: flex;
+              justify-content: end;
+            `}
+          >
+            <Button variant="contained" size="large" onClick={onSubmit}>
+              Comment
+            </Button>
+          </div>
+        </form>
       </Box>
     </>
   );

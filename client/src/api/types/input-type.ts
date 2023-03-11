@@ -1,4 +1,8 @@
-import { QueryCommandInput } from "@aws-sdk/client-dynamodb";
+import {
+  AttributeValue,
+  PutItemCommandInput,
+  QueryCommandInput,
+} from "@aws-sdk/client-dynamodb";
 
 export const createGetProjectByIDInput = (
   projectId: string
@@ -63,5 +67,14 @@ export const getCommentsByProjectIdInput = (
     ExpressionAttributeNames: {
       "#project_id": "project_id",
     },
+  };
+};
+
+export const createCommentInput = (
+  item: Record<string, AttributeValue>
+): PutItemCommandInput => {
+  return {
+    TableName: "comment",
+    Item: item,
   };
 };

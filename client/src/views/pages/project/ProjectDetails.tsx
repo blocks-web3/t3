@@ -7,9 +7,8 @@ import Tabs from "@mui/material/Tabs";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getCommentsByProjectId } from "../../../api/comment";
 import { getProjectByID, getProjectMembersByID } from "../../../api/project";
-import { Comment, Member, Project } from "../../../api/types/model";
+import { Member, Project } from "../../../api/types/model";
 import TabPanel from "../../components/atoms/TabPanel";
 import EvaluationTab from "../../components/EvaluationTab";
 import MainContainer from "../../components/MainContainer";
@@ -43,24 +42,20 @@ const tabs = [
 const ProjectDetails: React.FC = () => {
   const [project, setProject] = useState<Project>();
   const [members, setMembers] = useState<Member[]>();
-  const [comments, setComments] = useState<Comment[]>();
   const { projectId } = useParams();
 
   useEffect(() => {
     if (!projectId) return;
 
     const fetch = async () => {
-      const [project, members, comments] = await Promise.all([
+      const [project, members] = await Promise.all([
         getProjectByID(projectId),
         getProjectMembersByID(projectId),
-        getCommentsByProjectId(projectId),
       ]);
 
       setProject(project);
       setMembers(members);
-      setComments(comments);
     };
-
     fetch();
   }, [projectId]);
 
@@ -105,11 +100,7 @@ const ProjectDetails: React.FC = () => {
           </Tabs>
         </Box>
         <TabPanel value={value} index={0} title="Project Details">
-          <ProjectDetailsTab
-            project={project}
-            members={members}
-            comments={comments}
-          />
+          <ProjectDetailsTab project={project} members={members} />
         </TabPanel>
         <TabPanel value={value} index={1} title="Vote Result">
           <VoteTab />
