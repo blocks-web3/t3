@@ -30,3 +30,13 @@ export interface Member {
   project_id: string;
   member_role: string;
 }
+
+export interface Comment {
+  comment_id: string;
+  project_id: string;
+  author_name: string;
+  author_address: string;
+  comment: string;
+  created_at: string;
+  updated_at?: string;
+}
