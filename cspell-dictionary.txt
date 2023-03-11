@@ -4,4 +4,5 @@ bignumber
 cognitoidentity
 givenname
 Mypage
+unmarshall
 userpool

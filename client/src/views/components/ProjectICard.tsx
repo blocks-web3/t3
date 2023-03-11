@@ -1,19 +1,10 @@
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import { useNavigate } from "react-router-dom";
 import { Project } from "../../api/types/model";
-
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-  >
-    •
-  </Box>
-);
 
 type Props = {
   project: Project;
@@ -21,6 +12,7 @@ type Props = {
 
 export default function ProjectCard(props: Props) {
   const { project } = props;
+  const navigate = useNavigate();
   return (
     <Card sx={{ minWidth: 275, margin: "1rem auto" }}>
       <CardContent>
@@ -38,7 +30,12 @@ export default function ProjectCard(props: Props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Learn More</Button>
+        <Button
+          size="small"
+          onClick={() => navigate(`/project/details/${project.project_id}`)}
+        >
+          Learn More
+        </Button>
       </CardActions>
     </Card>
   );

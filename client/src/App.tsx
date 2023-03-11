@@ -3,7 +3,6 @@ import { css, Global } from "@emotion/react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import emotionReset from "emotion-reset";
 import { useContext } from "react";
-import "./App.css";
 import { SessionContext } from "./auth/AuthContextProvider";
 import LayoutBase from "./views/layout/LayoutBase";
 
@@ -26,14 +25,19 @@ function App() {
         light: "#ff6333",
         dark: "#b22a00",
       },
+      text: {
+        primary: "#1e1e1e",
+        secondary: "#fff",
+        disabled: "#d9d9d9",
+      },
     },
     typography: {
-      h1: { fontSize: pxToRem(60) },
-      h2: { fontSize: pxToRem(48) },
-      h3: { fontSize: pxToRem(42) },
-      h4: { fontSize: pxToRem(36) },
-      h5: { fontSize: pxToRem(20) },
-      h6: { fontSize: pxToRem(18) },
+      h1: { fontSize: pxToRem(48), fontWeight: 700 },
+      h2: { fontSize: pxToRem(36), fontWeight: 700 },
+      h3: { fontSize: pxToRem(28), fontWeight: 700 },
+      h4: { fontSize: pxToRem(24), fontWeight: 700 },
+      h5: { fontSize: pxToRem(20), fontWeight: 500 },
+      h6: { fontSize: pxToRem(18), fontWeight: 500 },
       subtitle1: { fontSize: pxToRem(18) },
       body1: { fontSize: pxToRem(16) },
     },
