@@ -1,4 +1,4 @@
-import { QueryCommandInput } from "@aws-sdk/client-dynamodb";
+import { QueryCommandInput, ScanCommandInput } from "@aws-sdk/client-dynamodb";
 
 export const createGetProjectByIDInput = (
   projectId: string
@@ -45,4 +45,11 @@ export const getProjectsInput: QueryCommandInput = {
   ExpressionAttributeNames: {
     "#type": "type",
   },
+};
+
+export const getUsersInput = (): ScanCommandInput => {
+  return {
+    TableName: "user",
+    Limit: 150,
+  };
 };
