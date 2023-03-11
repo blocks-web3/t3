@@ -129,7 +129,6 @@ const ProjectDetailsTab = (props: Props) => {
         })}
         <form action="submit">
           <TextField
-            defaultValue={""}
             onChange={onChangeComment}
             value={commentInput}
             placeholder="Add comment..."
