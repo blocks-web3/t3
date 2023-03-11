@@ -27,7 +27,7 @@ function App() {
       },
       text: {
         primary: "#1e1e1e",
-        secondary: "#fff",
+        secondary: "#3f51b5",
         disabled: "#d9d9d9",
       },
     },

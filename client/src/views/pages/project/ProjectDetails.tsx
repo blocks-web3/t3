@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { css, SerializedStyles } from "@emotion/react";
+import { css } from "@emotion/react";
 import Box from "@mui/material/Box";
 import grey from "@mui/material/colors/grey";
-import Grid from "@mui/material/Grid";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
@@ -11,18 +10,21 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getProjectByID, getProjectMembersByID } from "../../../api/project";
 import { Member, Project } from "../../../api/types/model";
-import { formatIsoString, numberFormat } from "../../../lib/utils/format-util";
-import HiddenText from "../../components/atoms/HiddenText";
+import EvaluationTab from "../../components/EvaluationTab";
 import MainContainer from "../../components/MainContainer";
+import ProjectDetailsTab from "../../components/ProjectDetailsTab";
+import ProjectOutcomeTab from "../../components/ProjectOutcomeTab";
+import VoteTab from "../../components/VoteTab";
 
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
+  title: string;
 }
 
 function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
+  const { children, title, value, index, ...other } = props;
 
   return (
     <div
@@ -34,18 +36,45 @@ function TabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          <Typography
+            variant="h4"
+            align="left"
+            css={css`
+              margin: 2rem 0;
+              width: 100%;
+            `}
+          >
+            {title}
+          </Typography>
+          {children}
         </Box>
       )}
     </div>
   );
 }
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
+
+const tabs = [
+  {
+    index: 0,
+    label: "Project Details",
+    title: "Project Details",
+  },
+  {
+    index: 1,
+    label: "Vote",
+    title: "Vote",
+  },
+  {
+    index: 2,
+    label: "Project Outcome",
+    title: "Project Outcome",
+  },
+  {
+    index: 3,
+    label: "Evaluation",
+    title: "Evaluation",
+  },
+];
 
 const ProjectDetails: React.FC = () => {
   const [project, setProject] = useState<Project>();
@@ -92,175 +121,32 @@ const ProjectDetails: React.FC = () => {
       >
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs
+            textColor="secondary"
+            indicatorColor="secondary"
             value={value}
             onChange={handleChange}
             aria-label="basic tabs example"
           >
-            <Tab label="Item One" {...a11yProps(0)} />
-            <Tab label="Item Two" {...a11yProps(1)} />
-            <Tab label="Item Three" {...a11yProps(2)} />
+            {tabs.map((tab) => {
+              return <Tab key={tab.index} label={tab.label} />;
+            })}
           </Tabs>
         </Box>
-        <TabPanel value={value} index={0}>
-          Item One
+        <TabPanel value={value} index={0} title="Project Details">
+          <ProjectDetailsTab project={project} members={members} />
         </TabPanel>
-        <TabPanel value={value} index={1}>
-          Item Two
+        <TabPanel value={value} index={1} title="Vote Result">
+          <VoteTab />
         </TabPanel>
-        <TabPanel value={value} index={2}>
-          Item Three
+        <TabPanel value={value} index={2} title="Project Outcome">
+          <ProjectOutcomeTab />
         </TabPanel>
-        <Typography
-          variant="h4"
-          align="left"
-          css={css`
-            margin: 2rem 0;
-            width: 100%;
-          `}
-        >
-          Project Details
-        </Typography>
-        <ProjectItem
-          label="Target Quarter"
-          value={project?.quarter ?? "TBD"}
-        ></ProjectItem>
-        <ProjectItem
-          label="Project Members"
-          value={members ? resolveProjectMembers(members) : "TBD"}
-        ></ProjectItem>
-        <ProjectItem label="Token Shares">
-          <ProjectSubItem
-            label="Required Token"
-            value={`${
-              project?.proposal?.required_token_number
-                ? numberFormat(project?.proposal?.required_token_number)
-                : "-"
-            } T3`}
-          ></ProjectSubItem>
-          <ProjectSubItem
-            label="Collected Token"
-            value={`- T3`}
-            css={css`
-              margin: 2rem;
-            `}
-          ></ProjectSubItem>
-        </ProjectItem>
-        <ProjectItem label="Project Members">
-          <HiddenText
-            text={project?.proposal?.content ?? "-"}
-            maxLength={200}
-          />
-        </ProjectItem>
-        <ProjectItem
-          label="Created Datetime"
-          value={
-            project?.created_at ? formatIsoString(project?.created_at) : "-"
-          }
-        ></ProjectItem>
-        <ProjectItem
-          label="Updated Datetime"
-          value={
-            project?.updated_at ? formatIsoString(project?.updated_at) : "-"
-          }
-        ></ProjectItem>
+        <TabPanel value={value} index={3} title="Evaluation Result">
+          <EvaluationTab />
+        </TabPanel>
       </div>
     </MainContainer>
   );
-};
-
-const ProjectItem = (props: {
-  label: string;
-  children?: React.ReactNode;
-  value?: string;
-}) => {
-  const { label, children, value } = props;
-
-  return (
-    <Grid
-      container
-      css={css`
-        margin: 2rem 0;
-      `}
-    >
-      <Grid item xs={3}>
-        <Typography
-          variant="h5"
-          align="left"
-          css={css`
-            font-weight: 600;
-          `}
-        >
-          {label}
-        </Typography>
-      </Grid>
-      <Grid item xs={9}>
-        {value ? (
-          <Typography
-            variant="h5"
-            align="left"
-            css={css`
-              white-space: pre-wrap;
-            `}
-          >
-            {value}
-          </Typography>
-        ) : (
-          <>{children}</>
-        )}
-      </Grid>
-    </Grid>
-  );
-};
-
-const ProjectSubItem = (props: {
-  label: string;
-  value: string;
-  css?: SerializedStyles;
-}) => {
-  const { label, value } = props;
-  // console.log(cssProp);
-  return (
-    <Grid
-      container
-      css={css`
-        margin-bottom: 1rem;
-      `}
-    >
-      <Grid item xs={3}>
-        <Typography variant="h5" align="left" css={css``}>
-          {`${label}: `}
-        </Typography>
-      </Grid>
-      <Grid item xs={3}>
-        <Typography variant="h5" align="right" css={css``}>
-          {value}
-        </Typography>
-      </Grid>
-    </Grid>
-  );
-};
-
-const resolveProjectMembers = (members: Member[]) => {
-  let result = "";
-  members
-    .sort((a, b) => (b.member_role === "PROPOSER" ? 1 : -1))
-    .forEach((member: Member) => {
-      if (result) {
-        result += ", ";
-      }
-      switch (member.member_role) {
-        case "PROPOSER":
-          result += `P.${member.member_name}`;
-          break;
-        case "COLLABORATOR":
-          result += `C.${member.member_name}`;
-          break;
-        default:
-          result += `${member.member_name}`;
-          break;
-      }
-    });
-  return result;
 };
 
 export default ProjectDetails;
