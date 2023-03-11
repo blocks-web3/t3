@@ -6,7 +6,7 @@ import {
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { getAddress } from "../wallet/wallet-util";
-import { CognitoIdToken, Session, StsCredentials } from "./AuthContextProvider";
+import { CognitoIdToken, Session, StsCredentials } from "./AuthContext";
 
 type GrantType = "authorization_code" | "refresh_token";
 

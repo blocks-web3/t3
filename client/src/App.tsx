@@ -2,14 +2,11 @@
 import { css, Global } from "@emotion/react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import emotionReset from "emotion-reset";
-import { useContext } from "react";
-import "./App.css";
-import { SessionContext } from "./auth/AuthContextProvider";
+import { AuthContextProvider } from "./auth/AuthContext";
+import { LoadingContextProvider } from "./loading/LoadingContext";
 import LayoutBase from "./views/layout/LayoutBase";
 
 function App() {
-  const [session] = useContext(SessionContext);
-
   const {
     typography: { pxToRem },
   } = createTheme();
@@ -41,38 +38,40 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <SessionContext.Provider value={[session]}>
-        <div className="App">
-          <Global
-            styles={css`
-              ${emotionReset}
+      <AuthContextProvider>
+        <LoadingContextProvider>
+          <div className="App">
+            <Global
+              styles={css`
+                ${emotionReset}
 
-              *, *::after, *::before {
-                box-sizing: border-box;
-                -moz-osx-font-smoothing: grayscale;
-                -webkit-font-smoothing: antialiased;
-              }
-              body {
-                margin: 0;
-                padding: 0;
-              }
-              a {
-                text-decoration: none;
-                :visited,
-                :link {
-                  color: inherit;
+                *, *::after, *::before {
+                  box-sizing: border-box;
+                  -moz-osx-font-smoothing: grayscale;
+                  -webkit-font-smoothing: antialiased;
                 }
-              }
-              #root {
-                margin: 0;
-                padding: 0;
-                max-width: none;
-              }
-            `}
-          />
-          <LayoutBase />
-        </div>
-      </SessionContext.Provider>
+                body {
+                  margin: 0;
+                  padding: 0;
+                }
+                a {
+                  text-decoration: none;
+                  :visited,
+                  :link {
+                    color: inherit;
+                  }
+                }
+                #root {
+                  margin: 0;
+                  padding: 0;
+                  max-width: none;
+                }
+              `}
+            />
+            <LayoutBase />
+          </div>
+        </LoadingContextProvider>
+      </AuthContextProvider>
     </ThemeProvider>
   );
 }

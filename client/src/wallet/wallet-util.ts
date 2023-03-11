@@ -1,7 +1,8 @@
 import { KmsEthersSigner } from "aws-kms-ethers-signer";
 import BigNumber from "bignumber.js";
 import * as ethers from "ethers";
-import { Session, StsCredentials } from "../auth/AuthContextProvider";
+import { Session, StsCredentials } from "../auth/AuthContext";
+import { projectFactoryAbi } from "./abis";
 
 export async function getAddress(
   userId: string,
@@ -19,6 +20,48 @@ export async function sendNativeToken(
   return await getSigner(session).sendTransaction({
     to,
     value: sendWeiValue,
+  });
+}
+
+type ProjectCreatedEvent = {
+  owner: string;
+  projectAddress: string;
+};
+
+export function createProjectContract(
+  session: Session,
+  projectId: string,
+  period: number
+): Promise<ProjectCreatedEvent> {
+  return new Promise((resolve, reject) => {
+    const factoryContract = new ethers.Contract(
+      import.meta.env.VITE_PROJECT_FACTORY_CONTRACT_ADDRESS,
+      projectFactoryAbi,
+      getSigner(session)
+    );
+    const filter = factoryContract.filters.ProjectCreated(
+      session.address,
+      projectId,
+      null
+    );
+    factoryContract.on(filter, (address, projectId, projectAddress) => {
+      console.log("event:", address, projectId, projectAddress);
+      resolve({
+        owner: address,
+        projectAddress: projectAddress,
+      });
+    });
+
+    try {
+      factoryContract.createProject(
+        import.meta.env.VITE_T3_TOKEN_CONTRACT_ADDRESS,
+        projectId,
+        period
+      );
+    } catch (error) {
+      console.error(error);
+      reject(error);
+    }
   });
 }
 
