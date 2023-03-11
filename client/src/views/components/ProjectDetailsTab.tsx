@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css, SerializedStyles } from "@emotion/react";
-import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import grey from "@mui/material/colors/grey";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";

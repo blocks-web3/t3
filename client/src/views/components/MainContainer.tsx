@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, SerializedStyles } from "@emotion/react";
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import React from "react";
 
 const MainContainer = (props: {
