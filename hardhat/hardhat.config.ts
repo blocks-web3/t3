@@ -3,7 +3,6 @@ import { HardhatUserConfig } from "hardhat/config";
 
 const ALCHEMY_API_KEY = "yFU9vYxcqtFIdslFvfTidoVTszqpZMem";
 const GOERLI_PRIVATE_KEY = "XXXX";
-// const ALCHEMY_API_KEY = "yFU9vYxcqtFIdslFvfTidoVTszqpZMem";
 
 const config: HardhatUserConfig = {
   solidity: {
