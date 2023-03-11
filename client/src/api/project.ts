@@ -1,6 +1,5 @@
-import { PutItemCommand, QueryCommand } from "@aws-sdk/client-dynamodb";
+import { BatchWriteItemCommand, QueryCommand } from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
-import BigNumber from "bignumber.js";
 import { Session } from "../auth/AuthContext";
 import { ddbClient } from "./dynamodb-client";
 import {
@@ -8,7 +7,7 @@ import {
   createGetProjectMembersByIDInput,
   getProjectsInput,
 } from "./types/input-type";
-import { Member, Project } from "./types/model";
+import { Member, Project, User } from "./types/model";
 
 export const getProjectByID = async (projectId: string) => {
   try {
@@ -46,20 +45,22 @@ export const getProjects = async () => {
 
 export type PostProjectInput = {
   projectId: string;
+  projectMembers: User[];
   session: Session;
   title: string;
   content: string;
-  requiredTokenNumber: BigNumber;
+  requiredTokenNumber: number;
+  requiredTotalDays: number;
   contractAddress: string;
   ownerAddress: string;
 };
+
 export const postProject = async (input: PostProjectInput) => {
-  try {
-    const post = new PutItemCommand({
-      TableName: "project",
+  const projectItemRequest = {
+    PutRequest: {
       Item: {
         project_id: { S: input.projectId },
-        project_member_address: { S: input.ownerAddress },
+        project_member_address: { S: `PJ#${input.projectId}` },
         type: { S: "pj" },
         status: { S: "PROPOSAL" },
         quarter: { S: "2023Q1" },
@@ -72,11 +73,52 @@ export const postProject = async (input: PostProjectInput) => {
               S: input.content,
             },
             hiring_number: { N: "3" },
-            required_token_number: { N: input.requiredTokenNumber.toFixed() },
+            required_token_number: {
+              N: input.requiredTokenNumber,
+            },
+            required_total_days: {
+              N: input.requiredTotalDays,
+            },
             impl_period_from_date: { S: "2023-03-10" },
             impl_period_to_date: { S: "2023-03-19" },
           },
         },
+      },
+    },
+  };
+  const projectProposer = {
+    PutRequest: {
+      Item: {
+        project_id: { S: input.projectId },
+        project_member_address: { S: `USER#${input.session.address}` },
+        type: { S: "user" },
+        member_name: { S: input.session.userName },
+        member_role: {
+          S: "PROPOSER",
+        },
+      },
+    },
+  };
+
+  const projectCollaborator = input.projectMembers.map((user: User) => {
+    return {
+      PutRequest: {
+        Item: {
+          project_id: { S: input.projectId },
+          project_member_address: { S: `USER#${user.wallet_address}` },
+          type: { S: "user" },
+          member_name: { S: user.employee_name },
+          member_role: {
+            S: "COLLABORATOR",
+          },
+        },
+      },
+    };
+  });
+  try {
+    const post = new BatchWriteItemCommand({
+      RequestItems: {
+        project: [projectItemRequest, projectProposer, ...projectCollaborator],
       },
     });
     const data = await ddbClient.send(post);

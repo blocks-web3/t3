@@ -3,6 +3,7 @@ export interface Proposal {
   content: string;
   hiring_number: number;
   required_token_number: number;
+  required_total_days: number;
   impl_period_from_date: Date;
   impl_period_to_date: Date;
 }
@@ -29,6 +30,12 @@ export interface Member {
   member_name: string;
   project_id: string;
   member_role: string;
+}
+
+export interface User {
+  employee_id: string;
+  wallet_address: string;
+  employee_name: string;
 }
 
 export interface Comment {

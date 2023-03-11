@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css, Global } from "@emotion/react";
-import { createTheme, ThemeProvider } from "@mui/material";
+import createTheme from "@mui/material/createTheme";
+import ThemeProvider from "@mui/material/ThemeProvider";
 import emotionReset from "emotion-reset";
 import { AuthContextProvider } from "./auth/AuthContext";
 import { LoadingContextProvider } from "./loading/LoadingContext";

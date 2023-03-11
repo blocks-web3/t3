@@ -2,6 +2,7 @@ import {
   AttributeValue,
   PutItemCommandInput,
   QueryCommandInput,
+  ScanCommandInput,
 } from "@aws-sdk/client-dynamodb";
 
 export const createGetProjectByIDInput = (
@@ -49,6 +50,13 @@ export const getProjectsInput: QueryCommandInput = {
   ExpressionAttributeNames: {
     "#type": "type",
   },
+};
+
+export const getUsersInput = (): ScanCommandInput => {
+  return {
+    TableName: "user",
+    Limit: 150,
+  };
 };
 
 export const getCommentsByProjectIdInput = (
