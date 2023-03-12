@@ -6,8 +6,9 @@ describe("Project", function () {
   async function deployProject() {
     const [owner, user1, user2] = await ethers.getSigners();
 
-    const Token = await ethers.getContractFactory("T3Token");
-    const token = await Token.deploy(10);
+    const Token = await ethers.getContractFactory("T3TimeCoin");
+    const token = await Token.deploy(0);
+    await token.airdrop([owner.address], [10]);
 
     const Factory = await ethers.getContractFactory("ProjectFactory");
     const factory = await Factory.deploy();
@@ -15,8 +16,8 @@ describe("Project", function () {
     return { token, factory, owner, user1, user2 };
   }
 
-  describe("Deploy", function () {
-    it("Create project contract", async function () {
+  describe("Test Project with TimeCoin", function () {
+    it("Create project and support", async function () {
       const { token, factory, owner, user1 } = await loadFixture(deployProject);
       await token.transfer(user1.address, 1);
 
@@ -25,11 +26,16 @@ describe("Project", function () {
 
       const tx = await factory.createProject(token.address, projectID, period);
       const receipt = await tx.wait();
-      const projectEvent = receipt.events[2];
-      expect(projectEvent.args.projectId).to.equal(projectID);
-      expect(projectEvent.args.owner).to.equal(owner.address);
 
-      const projectAddress = projectEvent.args.projectAddress;
+      const projectEvent = receipt.events[2];
+      expect(projectEvent.args[0]).to.equal(owner.address);
+
+      const projectIDHash = ethers.utils.id(projectID);
+      expect(projectEvent.args[1].hash).to.equal(projectIDHash);
+
+      const projectAddress = projectEvent.args[2];
+      expect(await factory.getProjectAddress(projectID)).to.equal(projectAddress);
+
       const project = await ethers.getContractAt("Project", projectAddress, owner);
 
       await token.connect(user1).approve(projectAddress, 1); // approve before donation

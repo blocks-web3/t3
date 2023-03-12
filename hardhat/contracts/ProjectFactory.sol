@@ -29,7 +29,7 @@ contract ProjectFactory is Ownable {
         return _address;
     }
 
-    function getProjectAddress(string calldata projectId) external view returns (address){
+    function getProjectAddress(string memory projectId) external view returns (address){
         return projects[projectId];
     }
 }

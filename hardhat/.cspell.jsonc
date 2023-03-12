@@ -15,6 +15,7 @@
     "package.json",
     ".cspell.jsonc",
     "yarn.lock",
-    "pnpm-lock.yaml"
+    "pnpm-lock.yaml",
+    "hardhat.config.ts"
   ]
 }
