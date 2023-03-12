@@ -14,6 +14,7 @@ contract Project is Ownable {
     IERC20 public immutable token;
     string public ID;
     mapping(address => uint256) public donors;
+    uint256 public donatedAmount;
 
     Timers.BlockNumber private _deadline;
 
@@ -40,13 +41,11 @@ contract Project is Ownable {
             "Project: You need to approve first"
         );
         donors[_msgSender()] += _amount;
+        donatedAmount += _amount;
     }
 
     function withdraw() public onlyOwner {
-        require(
-            isExpired(),
-            "Project: You cannot withdraw before expiration"
-        );
+        require(isExpired(), "Project: You cannot withdraw before expiration");
 
         token.transfer(owner(), token.balanceOf(address(this)));
     }

@@ -5,8 +5,9 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract T3Token is ERC20, ERC20Permit, ERC20Votes {
+contract T3Token is Ownable, ERC20, ERC20Permit, ERC20Votes {
     constructor(
         uint256 _initialSupply
     ) ERC20("T3Token", "T3T") ERC20Permit("T3Token") {
@@ -36,7 +37,16 @@ contract T3Token is ERC20, ERC20Permit, ERC20Votes {
         super._burn(account, amount);
     }
 
-    function airdrop() public {
-        //TODO
+    function airdrop(
+        address[] memory _addresses,
+        uint256[] memory _amounts
+    ) public onlyOwner {
+        require(
+            _addresses.length == _amounts.length,
+            "T3TimeCoin: airdrop: addresses and amounts must be the same length"
+        );
+        for (uint256 i = 0; i < _addresses.length; i++) {
+            _mint(_addresses[i], _amounts[i]);
+        }
     }
 }
