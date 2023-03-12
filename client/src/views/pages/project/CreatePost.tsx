@@ -233,7 +233,7 @@ const CreatePost: React.FC = () => {
             <Box>
               <FormLabel>Contents</FormLabel>
               <Editor
-                initialValue={markDown}
+                initialValue={markDown || " "} // 初期値がnullだと謎のデフォルト値が入るのでスペースを入れておく
                 usageStatistics={false}
                 previewStyle="vertical"
                 height="auto"

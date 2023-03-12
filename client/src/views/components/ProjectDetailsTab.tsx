@@ -121,7 +121,7 @@ const ProjectDetailsTab = (props: Props) => {
         <form action="submit">
           <Box>
             <Editor
-              initialValue=" "
+              initialValue=" " // 初期値がnullだと謎のデフォルト値が入るのでスペースを入れておく
               usageStatistics={false}
               previewStyle="vertical"
               height="auto"
