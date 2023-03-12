@@ -4,9 +4,13 @@
   "main": "index.js",
   "author": "Weiliang Li <to.be.impressive@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "compile": "hardhat compile"
+  },
   "dependencies": {
     "@openzeppelin/contracts": "^4.8.2",
-    "alchemy-sdk": "^2.5.0"
+    "alchemy-sdk": "^2.5.0",
+    "dotenv": "^16.0.3"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.4.7",

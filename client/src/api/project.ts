@@ -1,4 +1,8 @@
-import { BatchWriteItemCommand, QueryCommand } from "@aws-sdk/client-dynamodb";
+import {
+  BatchWriteItemCommand,
+  QueryCommand,
+  UpdateItemCommand,
+} from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { Session } from "../auth/AuthContext";
 import { ddbClient } from "./dynamodb-client";
@@ -6,6 +10,7 @@ import {
   createGetProjectByIDInput,
   createGetProjectMembersByIDInput,
   getProjectsInput,
+  postResultInput,
 } from "./types/input-type";
 import { Member, Project, User } from "./types/model";
 
@@ -64,6 +69,7 @@ export const postProject = async (input: PostProjectInput) => {
         type: { S: "pj" },
         status: { S: "PROPOSAL" },
         quarter: { S: "2023Q1" },
+        contract_address: { S: input.contractAddress },
         created_at: { S: new Date().toUTCString() },
         updated_at: { S: new Date().toUTCString() },
         proposal: {
@@ -125,6 +131,22 @@ export const postProject = async (input: PostProjectInput) => {
     return data;
   } catch (err) {
     console.error("Error", err);
+    throw err;
+  }
+};
+
+export type PostResultInput = {
+  projectId: string;
+  result: string;
+};
+
+export const postResult = async (input: PostResultInput) => {
+  try {
+    await ddbClient.send(
+      new UpdateItemCommand(postResultInput(input.projectId, input.result))
+    );
+  } catch (err) {
+    console.error(err);
     throw err;
   }
 };
