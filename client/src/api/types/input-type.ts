@@ -65,7 +65,7 @@ export const getCommentsByProjectIdInput = (
   return {
     TableName: "comment",
     IndexName: "ProjectID-CreatedAt-Index",
-    ScanIndexForward: false,
+    ScanIndexForward: true,
     KeyConditionExpression: "#project_id = :project_id",
     ExpressionAttributeValues: {
       ":project_id": {

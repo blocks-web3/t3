@@ -4,9 +4,10 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import grey from "@mui/material/colors/grey";
 import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { useEffect, useState } from "react";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import { Editor, Viewer } from "@toast-ui/react-editor";
+import { useEffect, useRef, useState } from "react";
 import {
   CommentInput,
   createComment,
@@ -15,11 +16,9 @@ import {
 import { Comment, Member, Project } from "../../api/types/model";
 import { useSession } from "../../auth/AuthContext";
 import {
-  formatIsoString,
   formatIsoStringWithTime,
   numberFormat,
 } from "../../lib/utils/format-util";
-import HiddenText from "./atoms/HiddenText";
 
 interface Props {
   project: Project | undefined;
@@ -28,8 +27,9 @@ interface Props {
 
 const ProjectDetailsTab = (props: Props) => {
   const { project, members } = props;
-  const [commentInput, setCommentInput] = useState("");
   const [comments, setComments] = useState<Comment[]>([]);
+  const contentsRef = useRef<Editor>(null);
+  const { session } = useSession();
 
   useEffect(() => {
     if (!project) return;
@@ -39,34 +39,24 @@ const ProjectDetailsTab = (props: Props) => {
       setComments(comments);
     };
     fetch();
-  }, [project]);
-
-  const onChangeComment = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setCommentInput(value);
-  };
-
-  const { session } = useSession();
+  }, [project, props.project]);
 
   const onSubmit = async () => {
+    const markdown = contentsRef.current?.getInstance().getMarkdown();
+    if (!markdown) return;
     const req: CommentInput = {
       projectId: project!.project_id,
       session: session!,
-      comment: commentInput,
+      comment: markdown,
     };
     const data = await createComment(req);
     if (!data) return;
-    setComments((prev) => [data, ...prev]);
-    setCommentInput("");
+    setComments((prev) => [...prev, data]);
   };
 
   return (
     <>
       <Box>
-        <ProjectItem
-          label="Target Quarter"
-          value={project?.quarter ?? "TBD"}
-        ></ProjectItem>
         <ProjectItem
           label="Project Members"
           value={members ? resolveProjectMembers(members) : "TBD"}
@@ -88,31 +78,32 @@ const ProjectDetailsTab = (props: Props) => {
             `}
           ></ProjectSubItem>
         </ProjectItem>
-        <ProjectItem label="Project Members">
-          <HiddenText
-            text={project?.proposal?.content ?? "-"}
-            maxLength={200}
-          />
-        </ProjectItem>
-        <ProjectItem
-          label="Created Datetime"
-          value={
-            project?.created_at ? formatIsoString(project?.created_at) : "-"
-          }
-        ></ProjectItem>
-        <ProjectItem
-          label="Updated Datetime"
-          value={
-            project?.updated_at ? formatIsoString(project?.updated_at) : "-"
-          }
-        ></ProjectItem>
+        <Typography
+          variant="h5"
+          align="left"
+          css={css`
+            font-weight: 600;
+          `}
+        >
+          Contents
+        </Typography>
+        <Box
+          css={{
+            borderWidth: "1px",
+            borderColor: grey[400],
+            borderStyle: "solid",
+            borderRadius: "4px",
+            padding: "16.5px 14px;",
+          }}
+        >
+          {project?.proposal?.content && (
+            <Viewer
+              initialValue={project?.proposal?.content}
+              usageStatistics={false}
+            ></Viewer>
+          )}
+        </Box>
       </Box>
-      <hr
-        css={css`
-          color: ${grey[300]};
-          margin: 2rem auto 3rem;
-        `}
-      />
       <Box>
         <Typography
           variant="h4"
@@ -128,19 +119,17 @@ const ProjectDetailsTab = (props: Props) => {
           return <CommentItem key={comment.comment_id} comment={comment} />;
         })}
         <form action="submit">
-          <TextField
-            defaultValue={""}
-            onChange={onChangeComment}
-            value={commentInput}
-            placeholder="Add comment..."
-            multiline
-            minRows={4}
-            maxRows={Infinity}
-            fullWidth
-            css={css`
-              margin: 1rem auto;
-            `}
-          />
+          <Box>
+            <Editor
+              initialValue=" "
+              usageStatistics={false}
+              previewStyle="vertical"
+              height="auto"
+              initialEditType="wysiwyg"
+              useCommandShortcut={true}
+              ref={contentsRef}
+            />
+          </Box>
           <div
             css={css`
               display: flex;
@@ -161,10 +150,21 @@ const CommentItem = (props: { comment: Comment }) => {
   const { comment } = props;
   return (
     <div>
-      <div
+      <Box
+        css={{
+          borderWidth: "1px",
+          borderColor: grey[400],
+          borderStyle: "solid",
+          borderRadius: "4px",
+          padding: "16.5px 14px;",
+        }}
+      >
+        <Viewer initialValue={comment.comment} usageStatistics={false}></Viewer>
+      </Box>
+      <Box
         css={css`
           display: flex;
-          margin: 0.5rem auto;
+          margin: 0.5rem 0.5rem 3rem 0.5rem;
         `}
       >
         <Typography variant="h6">{`${comment.author_name} (${comment.author_address})`}</Typography>
@@ -175,16 +175,7 @@ const CommentItem = (props: { comment: Comment }) => {
         >
           {formatIsoStringWithTime(comment.created_at)}
         </Typography>
-      </div>
-      <Typography>{comment.comment}</Typography>
-      <hr
-        css={css`
-          background-color: ${grey[300]};
-          border: none;
-          height: 1px;
-          margin: 0.5rem auto 1.5rem;
-        `}
-      />
+      </Box>
     </div>
   );
 };

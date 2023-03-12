@@ -37,7 +37,7 @@ type FormValues = {
 
 const CreatePost: React.FC = () => {
   const { session } = useSession();
-  const editorRef = useRef<Editor>(null);
+  const contentsRef = useRef<Editor>(null);
   const navigate = useNavigate();
   const { setLoading } = useLoading();
   const [users, setUsers] = useState<User[]>([]);
@@ -72,7 +72,7 @@ const CreatePost: React.FC = () => {
       return;
     }
     setLoading(true);
-    const markdown = editorRef.current?.getInstance().getMarkdown();
+    const markdown = contentsRef.current?.getInstance().getMarkdown();
     try {
       const projectId = uuidv4();
       const result = await createProjectContract(session, projectId, 123);
@@ -100,7 +100,7 @@ const CreatePost: React.FC = () => {
   };
 
   function onChangeContents() {
-    const markdown = editorRef.current?.getInstance().getMarkdown();
+    const markdown = contentsRef.current?.getInstance().getMarkdown();
     saveContents(markdown);
     setMarkdown(markdown);
   }
@@ -234,13 +234,14 @@ const CreatePost: React.FC = () => {
               <FormLabel>Contents</FormLabel>
               <Editor
                 initialValue={markDown}
+                usageStatistics={false}
                 previewStyle="vertical"
                 height="auto"
                 minHeight="400px"
                 initialEditType="wysiwyg"
                 useCommandShortcut={true}
                 onChange={onChangeContents}
-                ref={editorRef}
+                ref={contentsRef}
               />
             </Box>
             <Button type="submit" color="primary" variant="contained">

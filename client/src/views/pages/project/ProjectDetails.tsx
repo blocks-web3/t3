@@ -78,14 +78,7 @@ const ProjectDetails: React.FC = () => {
         padding: 2rem;
       `}
     >
-      <div
-        css={css`
-          border: solid 1.5px;
-          border-radius: 10px;
-          border-color: ${grey[300]};
-          padding: 2rem;
-        `}
-      >
+      <div>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs
             textColor="secondary"
@@ -99,16 +92,16 @@ const ProjectDetails: React.FC = () => {
             })}
           </Tabs>
         </Box>
-        <TabPanel value={value} index={0} title="Project Details">
+        <TabPanel value={value} index={0}>
           <ProjectDetailsTab project={project} members={members} />
         </TabPanel>
-        <TabPanel value={value} index={1} title="Vote Result">
+        <TabPanel value={value} index={1}>
           <VoteTab />
         </TabPanel>
-        <TabPanel value={value} index={2} title="Project Outcome">
+        <TabPanel value={value} index={2}>
           <ProjectOutcomeTab />
         </TabPanel>
-        <TabPanel value={value} index={3} title="Evaluation Result">
+        <TabPanel value={value} index={3}>
           <EvaluationTab />
         </TabPanel>
       </div>
