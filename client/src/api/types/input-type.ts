@@ -3,7 +3,9 @@ import {
   PutItemCommandInput,
   QueryCommandInput,
   ScanCommandInput,
+  UpdateItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
+import { marshall } from "@aws-sdk/util-dynamodb";
 
 export const createGetProjectByIDInput = (
   projectId: string
@@ -74,6 +76,27 @@ export const getCommentsByProjectIdInput = (
     },
     ExpressionAttributeNames: {
       "#project_id": "project_id",
+    },
+  };
+};
+
+export const postResultInput = (
+  projectId: string,
+  content: string
+): UpdateItemCommandInput => {
+  return {
+    TableName: "project",
+    Key: marshall({
+      project_id: projectId,
+      project_member_address: `PJ#${projectId}`,
+    }),
+    UpdateExpression: "set #result.#content = :content",
+    ExpressionAttributeNames: {
+      "#result": "result",
+      "#content": "content",
+    },
+    ExpressionAttributeValues: {
+      ":content": { S: content },
     },
   };
 };

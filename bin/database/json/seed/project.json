@@ -8,6 +8,7 @@
           "type": { "S": "pj" },
           "status": { "S": "PROPOSAL" },
           "quarter": { "S": "2023Q1" },
+          "contract_address": { "S": "0x00001" },
           "created_at": { "S": "2023-03-05T02:00:00.000Z" },
           "updated_at": { "S": "2023-03-05T02:00:00.000Z" },
           "proposal": {
@@ -36,7 +37,7 @@
       "PutRequest": {
         "Item": {
           "project_id": { "S": "1" },
-          "project_member_address": { "S": "USER#0x0001" },
+          "project_member_address": { "S": "USER#0xBB18f3b625fa6C83C09974B22AdE2131365167E5" },
           "type": { "S": "user" },
           "member_name": { "S": "後藤" },
           "member_role": { "S": "PROPOSER" }
@@ -62,6 +63,7 @@
           "type": { "S": "pj" },
           "status": { "S": "VOTE" },
           "quarter": { "S": "2023Q1" },
+          "contract_address": { "S": "0x00002" },
           "created_at": { "S": "2023-03-01T02:00:00.000Z" },
           "updated_at": { "S": "2023-03-01T02:00:00.000Z" },
           "proposal": {

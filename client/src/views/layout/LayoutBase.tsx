@@ -4,6 +4,7 @@ import { useSession } from "../../auth/AuthContext";
 import { useLoading } from "../../loading/LoadingContext";
 import { LoadingMask } from "../components/LoadingMask";
 import SideMenu from "../components/SideMenu";
+import CreateOutcome from "../pages/project/CreateOutcome";
 import CreatePost from "../pages/project/CreatePost";
 import ProjectDetails from "../pages/project/ProjectDetails";
 import ProjectList from "../pages/project/ProjectList";
@@ -23,7 +24,10 @@ const LayoutBase: React.FC = () => {
             <Route path="create-post" element={<CreatePost />} />
             <Route path="list" element={<ProjectList />} />
             <Route path="details">
-              <Route path=":projectId" element={<ProjectDetails />} />
+              <Route path=":projectId">
+                <Route path="" element={<ProjectDetails />} />
+                <Route path="create-outcome" element={<CreateOutcome />} />
+              </Route>
             </Route>
           </Route>
           <Route path="mypage">
