@@ -89,6 +89,12 @@ export const postProject = async (input: PostProjectInput) => {
             impl_period_to_date: { S: "2023-03-19" },
           },
         },
+        // 後で必要になるので入れておく
+        result: {
+          M: {
+            content: { S: "" },
+          },
+        },
       },
     },
   };
@@ -142,9 +148,10 @@ export type PostResultInput = {
 
 export const postResult = async (input: PostResultInput) => {
   try {
-    await ddbClient.send(
+    const response = await ddbClient.send(
       new UpdateItemCommand(postResultInput(input.projectId, input.result))
     );
+    console.log(response);
   } catch (err) {
     console.error(err);
     throw err;

@@ -10,7 +10,6 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 import { getProjectMembersByID, postResult } from "../../../api/project";
 import { Member } from "../../../api/types/model";
 import { useSession } from "../../../auth/AuthContext";
@@ -52,16 +51,15 @@ const CreateOutcome: React.FC = () => {
   }, [isMember, navigate, projectId, session?.address]);
 
   const handleSubmit = async () => {
-    console.log("called");
-    if (!session || (members && !isMember(members))) return;
+    if (!session || !projectId || (members && !isMember(members))) return;
 
     setLoading(true);
     const markdown = contentsRef.current?.getInstance().getMarkdown();
     try {
-      const projectId = uuidv4();
       await postResult({ projectId, result: markdown || "" });
       saveContents(undefined);
       setMarkdown(undefined);
+      navigate(`/project/details/${projectId}`);
     } catch (error) {
       console.error(error);
     } finally {
