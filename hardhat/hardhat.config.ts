@@ -1,6 +1,8 @@
 import "@nomicfoundation/hardhat-toolbox";
 import * as dotenv from "dotenv";
 import { HardhatUserConfig } from "hardhat/config";
+import "./tasks/airdropToken";
+
 dotenv.config();
 
 const config: HardhatUserConfig = {

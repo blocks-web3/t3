@@ -1,30 +1,49 @@
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { deployGovernor, increaseBlock, ProposalState } from "./common";
 
 describe("Project", function () {
   async function deployProject() {
     const [owner, user1, user2] = await ethers.getSigners();
+
+    const GovToken = await ethers.getContractFactory("T3Token");
+    const govToken = await GovToken.deploy(10);
+    const { governor, timelock } = await deployGovernor(
+      owner.address,
+      govToken.address,
+      1,
+      1,
+      2,
+      1
+    );
 
     const Token = await ethers.getContractFactory("T3TimeCoin");
     const token = await Token.deploy(0);
     await token.airdrop([owner.address], [10]);
 
     const Factory = await ethers.getContractFactory("ProjectFactory");
-    const factory = await Factory.deploy();
+    const factory = await Factory.deploy(timelock.address);
 
-    return { token, factory, owner, user1, user2 };
+    return { token, factory, governor, owner, user1, user2 };
   }
 
   describe("Test Project with TimeCoin", function () {
-    it("Create project and support", async function () {
+    const projectID = "DAO Tool Project";
+    const projectDescription = "This is a project for DAO Tool";
+    const targetAmount = 1;
+    const period = 4; // expires period - 1 blocks later
+
+    it("Create project", async function () {
       const { token, factory, owner, user1 } = await loadFixture(deployProject);
-      await token.transfer(user1.address, 1);
 
-      const projectID = "DAO Tool Project";
-      const period = 3; // expires 2 blocks later
-
-      const tx = await factory.createProject(token.address, projectID, period);
+      const tx = await factory.createProject(
+        token.address,
+        projectID,
+        projectDescription,
+        targetAmount,
+        period
+      );
       const receipt = await tx.wait();
 
       const projectEvent = receipt.events[2];
@@ -34,18 +53,107 @@ describe("Project", function () {
       expect(projectEvent.args[1].hash).to.equal(projectIDHash);
 
       const projectAddress = projectEvent.args[2];
-      expect(await factory.getProjectAddress(projectID)).to.equal(projectAddress);
+      expect(await factory.projects(projectID)).to.equal(projectAddress);
 
+      const project = await ethers.getContractAt("Project", projectAddress, owner);
+      await expect(project.connect(user1).makeComplete()).to.be.revertedWith(
+        "Ownable: caller is not the owner"
+      );
+    });
+
+    it("Support project", async function () {
+      const { token, factory, owner, user1 } = await loadFixture(deployProject);
+      await token.transfer(user1.address, 1);
+
+      const tx = await factory.createProject(
+        token.address,
+        projectID,
+        projectDescription,
+        targetAmount,
+        period
+      );
+
+      const projectAddress = await factory.projects(projectID);
       const project = await ethers.getContractAt("Project", projectAddress, owner);
 
       await token.connect(user1).approve(projectAddress, 1); // approve before donation
 
+      await expect(project.withdraw()).to.be.revertedWith(
+        "Project: You cannot withdraw before expiration"
+      );
+
       await project.connect(user1).support(1); // Donate/Vote T3 token
 
-      await project.withdraw();
+      await expect(project.support(1)).to.be.revertedWith(
+        "Project: You cannot support after expiration"
+      );
+
+      await expect(project.withdraw()).to.changeTokenBalances(
+        token,
+        [project, owner],
+        [-1, 1]
+      );
+
       expect(await project.donors(user1.address)).to.equal(1);
       expect(await project.donors(owner.address)).to.equal(0);
       expect(await token.balanceOf(owner.address)).to.equal(10);
+    });
+
+    it("Evaluate project", async function () {
+      const { token, factory, owner, user1, governor } = await loadFixture(
+        deployProject
+      );
+      await token.transfer(user1.address, 1);
+
+      await factory.createProject(
+        token.address,
+        projectID,
+        projectDescription,
+        targetAmount,
+        period
+      );
+      const projectAddress = await factory.projects(projectID);
+      const project = await ethers.getContractAt("Project", projectAddress, owner);
+
+      // () is needed in solidity but not here
+      const calldata = project.interface.encodeFunctionData("makeSucceeded()");
+      const description = "Propose for evaluating Project: " + projectID;
+      const descriptionHash = ethers.utils.id(description);
+      const proposalId = await governor.hashProposal(
+        [project.address],
+        [0],
+        [calldata],
+        descriptionHash
+      );
+
+      const tx = await governor.proposeProjectEvaluation(project.address, projectID);
+      const receipt = await tx.wait();
+      // ID calculated in solidity should be equal to here
+      expect(proposalId).to.equal(receipt.events[0].args.proposalId);
+      await increaseBlock();
+
+      await governor.castVote(proposalId, 1);
+      await increaseBlock();
+
+      const proposalStatus = await governor.proposals(proposalId);
+      expect(proposalStatus.forVotes).to.equal(10);
+
+      expect(ProposalState[await governor.state(proposalId)]).equal("Active");
+      await increaseBlock();
+      expect(ProposalState[await governor.state(proposalId)]).equal("Succeeded");
+
+      await governor["queue(uint256)"](proposalId);
+      expect(await project.isSucceeded()).to.equal(false);
+
+      await expect(governor["execute(uint256)"](proposalId)).to.be.revertedWith(
+        "TimelockController: underlying transaction reverted"
+      );
+
+      // make complete before
+      await project.makeComplete();
+
+      await governor["execute(uint256)"](proposalId);
+      expect(await project.isSucceeded()).to.equal(true);
     });
   });
 });

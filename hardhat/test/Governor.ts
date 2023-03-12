@@ -1,48 +1,44 @@
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { deployGovernor, increaseBlock } from "./common";
 
 describe("Governor", function () {
-  async function deployGovernor() {
+  async function deploy() {
     const [system, proposer, contributor, collaborator] = await ethers.getSigners();
 
     const Token = await ethers.getContractFactory("T3Token");
     const token = await Token.deploy(11);
     expect(await token.delegates(system.address)).to.equal(system.address);
 
-    const Timelock = await ethers.getContractFactory("TimelockController");
-    const delay = 2;
-
-    const timelock = await Timelock.deploy(
-      delay, // min delay (blocks) between queue and execute
-      [], // proposers, this should be governor contract
-      [], // executors, this should be governor contract
-      system.address
+    const { timelock, governor } = await deployGovernor(
+      system.address,
+      token.address,
+      2,
+      2,
+      3,
+      1
     );
 
-    const PROPOSER_ROLE = ethers.utils.id("PROPOSER_ROLE");
-    const EXECUTOR_ROLE = ethers.utils.id("EXECUTOR_ROLE");
-
-    const Governor = await ethers.getContractFactory("T3Governor");
-    const governor = await Governor.deploy(token.address, timelock.address, 2, 3, 1);
     expect(await token.delegates(system.address)).to.equal(system.address);
 
     // console.log(system.address, governor.address, token.address, timelock.address);
 
-    await timelock.grantRole(PROPOSER_ROLE, governor.address);
-    await timelock.grantRole(EXECUTOR_ROLE, governor.address);
-
-    return { token, timelock, governor, system, proposer, contributor, collaborator };
-  }
-
-  async function increaseBlock() {
-    await ethers.provider.send("evm_mine", []);
+    return {
+      token,
+      timelock,
+      governor,
+      system,
+      proposer,
+      contributor,
+      collaborator,
+    };
   }
 
   describe("Deploy", function () {
     it("Propose a transfer proposal", async function () {
       const { governor, timelock, token, proposer, contributor, collaborator } =
-        await loadFixture(deployGovernor);
+        await loadFixture(deploy);
 
       const transferCalldata = token.interface.encodeFunctionData("transfer", [
         collaborator.address,
@@ -61,12 +57,12 @@ describe("Governor", function () {
       const description = "Proposal #1: Give T3 token to collaborator";
       await governor
         .connect(proposer)
-      ["propose(address[],uint256[],bytes[],string)"](
-        [token.address],
-        [0],
-        [transferCalldata],
-        description
-      );
+        ["propose(address[],uint256[],bytes[],string)"](
+          [token.address],
+          [0],
+          [transferCalldata],
+          description
+        );
 
       const descriptionHash = ethers.utils.id(description);
       const proposalId = await governor.hashProposal(
@@ -99,13 +95,16 @@ describe("Governor", function () {
       await token.connect(contributor).transfer(timelock.address, 5);
 
       // before execute
-      expect(await token.balanceOf(timelock.address)).to.equal(10);
       expect(await token.balanceOf(collaborator.address)).to.equal(0);
 
       // execute
-      await governor["execute(uint256)"](proposalId);
+      await expect(governor["execute(uint256)"](proposalId)).to.changeTokenBalances(
+        token,
+        [timelock, collaborator],
+        [-10, 10]
+      );
+
       expect(await token.balanceOf(timelock.address)).to.equal(0);
-      expect(await token.balanceOf(collaborator.address)).to.equal(10);
     });
   });
 });
