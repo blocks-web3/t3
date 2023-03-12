@@ -17,7 +17,7 @@ const LayoutBase: React.FC = () => {
 
   return (
     <div>
-      <SideMenu title="T3 Project">
+      <SideMenu title="T3 DAO">
         <Routes>
           <Route path="/" element={<ProjectList />}></Route>
           <Route path="project">

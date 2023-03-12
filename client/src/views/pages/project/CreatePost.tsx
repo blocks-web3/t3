@@ -91,7 +91,7 @@ const CreatePost: React.FC = () => {
       const response = await postProject(input);
       saveContents(undefined);
       setMarkdown(undefined);
-      navigate("/project/list");
+      navigate(`/project/details/${projectId}`);
       console.log(response);
     } catch (error) {
       console.error(error);
@@ -138,7 +138,6 @@ const CreatePost: React.FC = () => {
               fullWidth
             >
               <FormLabel component="legend">Title</FormLabel>
-
               <FormHelperText>
                 {errors?.title ? errors?.title.message?.toString() : undefined}
               </FormHelperText>
@@ -219,7 +218,9 @@ const CreatePost: React.FC = () => {
                   name="requiredToken"
                   control={control}
                   rules={{ required: "入力してください" }}
-                  render={({ field }) => <TextField {...field} type="number" />}
+                  render={({ field }) => (
+                    <TextField {...field} type="number" autoComplete="off" />
+                  )}
                 />
               </FormControl>
               <FormControl
@@ -238,7 +239,9 @@ const CreatePost: React.FC = () => {
                   name="requiredTotalDays"
                   control={control}
                   rules={{ required: "入力してください" }}
-                  render={({ field }) => <TextField {...field} type="number" />}
+                  render={({ field }) => (
+                    <TextField {...field} type="number" autoComplete="off" />
+                  )}
                 />
               </FormControl>
             </Box>
