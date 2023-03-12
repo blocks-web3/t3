@@ -7,7 +7,8 @@ describe("Token", function () {
     const [owner, user1, user2] = await ethers.getSigners();
 
     const Token = await ethers.getContractFactory("T3Token");
-    const token = await Token.deploy(10);
+    const token = await Token.deploy(0);
+    await token.airdrop([owner.address], [10]);
 
     return { token, owner, user1, user2 };
   }
