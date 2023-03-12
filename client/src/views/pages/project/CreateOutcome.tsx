@@ -10,9 +10,14 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getProjectMembersByID, postResult } from "../../../api/project";
+import {
+  getProjectByID,
+  getProjectMembersByID,
+  postResult,
+} from "../../../api/project";
 import { Member } from "../../../api/types/model";
 import { useSession } from "../../../auth/AuthContext";
+import { isProjectMember } from "../../../lib/utils/validator";
 import { useLoading } from "../../../loading/LoadingContext";
 import MainContainer from "../../components/MainContainer";
 
@@ -30,21 +35,25 @@ const CreateOutcome: React.FC = () => {
 
   const isMember = useCallback(
     (members: Member[]) => {
-      return members.some((member) => {
-        if (!member.project_member_address.startsWith("USER#")) return false;
-        return member.project_member_address.substring(5) === session?.address;
-      });
+      return isProjectMember(members, session);
     },
-    [session?.address]
+    [session]
   );
 
   useEffect(() => {
     if (!projectId) return;
 
     const fetch = async () => {
-      const members = await getProjectMembersByID(projectId);
+      const [project, members] = await Promise.all([
+        getProjectByID(projectId),
+        getProjectMembersByID(projectId),
+      ]);
       if (!members) return;
+
       setMembers(members);
+      saveContents(project?.result?.content);
+      setMarkdown(project?.result?.content);
+
       if (!isMember) return navigate(`/project/details/${projectId}`);
     };
     fetch();

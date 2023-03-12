@@ -11,12 +11,12 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getProjectByID, getProjectMembersByID } from "../../../api/project";
 import { Member, Project } from "../../../api/types/model";
+import { useSession } from "../../../auth/AuthContext";
+import { isProjectMember } from "../../../lib/utils/validator";
 import TabPanel from "../../components/atoms/TabPanel";
-import EvaluationTab from "../../components/EvaluationTab";
 import MainContainer from "../../components/MainContainer";
 import ProjectDetailsTab from "../../components/ProjectDetailsTab";
 import ProjectOutcomeTab from "../../components/ProjectOutcomeTab";
-import VoteTab from "../../components/VoteTab";
 
 const tabs = [
   {
@@ -26,18 +26,8 @@ const tabs = [
   },
   {
     index: 1,
-    label: "Vote",
-    title: "Vote",
-  },
-  {
-    index: 2,
     label: "Project Outcome",
     title: "Project Outcome",
-  },
-  {
-    index: 3,
-    label: "Evaluation",
-    title: "Evaluation",
   },
 ];
 
@@ -46,6 +36,7 @@ const ProjectDetails: React.FC = () => {
   const [members, setMembers] = useState<Member[]>();
   const { projectId } = useParams();
   const navigate = useNavigate();
+  const { session } = useSession();
 
   useEffect(() => {
     if (!projectId) return;
@@ -94,19 +85,21 @@ const ProjectDetails: React.FC = () => {
         >
           {project?.proposal?.title ?? "No Title"}
         </Typography>
-        <Button
-          variant="contained"
-          size="small"
-          css={css`
-            height: 3rem;
-            margin-left: auto;
-          `}
-          onClick={() =>
-            navigate(`/project/details/${projectId}/create-outcome`)
-          }
-        >
-          Ready to post outcome?
-        </Button>
+        {members && isProjectMember(members, session) && (
+          <Button
+            variant="contained"
+            size="small"
+            css={css`
+              height: 3rem;
+              margin-left: auto;
+            `}
+            onClick={() =>
+              navigate(`/project/details/${projectId}/create-outcome`)
+            }
+          >
+            Ready to post outcome?
+          </Button>
+        )}
       </div>
       <div>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -126,13 +119,7 @@ const ProjectDetails: React.FC = () => {
           <ProjectDetailsTab project={project} members={members} />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <VoteTab />
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <ProjectOutcomeTab />
-        </TabPanel>
-        <TabPanel value={value} index={3}>
-          <EvaluationTab />
+          <ProjectOutcomeTab project={project} />
         </TabPanel>
       </div>
     </MainContainer>
