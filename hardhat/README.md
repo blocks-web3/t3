@@ -1,13 +1,17 @@
-# Sample Hardhat Project
+# Web3 dao tool
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+## Deploy locally
 
-Try running some of the following tasks:
-
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
+```bash
 npx hardhat node
-npx hardhat run scripts/deploy.ts
+npx hardhat run --network localhost scripts/deployT3Token.ts
+npx hardhat run --network localhost scripts/deployT3TimeCoin.ts
+```
+
+## Tasks
+
+### Airdrop
+
+```bash
+npx hardhat --network localhost airdrop --token T3Token --address TOKEN_ADDR --account ACCOUNT_A,ACCOUNT_B --amount 1,2
 ```

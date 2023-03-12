@@ -1,12 +1,12 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  const Factory = await ethers.getContractFactory("ProjectFactory");
-  const factory = await Factory.deploy();
+  const Factory = await ethers.getContractFactory("T3TimeCoin");
+  const factory = await Factory.deploy(100000000000000);
 
   const response = await factory.deployed();
 
-  console.log(`deployed Project factory. response: `, response);
+  console.log(`deployed T3TimeCoin. response: `, response);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
