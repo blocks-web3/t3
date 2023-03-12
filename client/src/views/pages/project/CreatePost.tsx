@@ -242,6 +242,7 @@ const CreatePost: React.FC = () => {
                 useCommandShortcut={true}
                 onChange={onChangeContents}
                 ref={contentsRef}
+                autofocus={false}
               />
             </Box>
             <Button type="submit" color="primary" variant="contained">

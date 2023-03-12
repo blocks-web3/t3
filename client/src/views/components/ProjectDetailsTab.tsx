@@ -128,6 +128,7 @@ const ProjectDetailsTab = (props: Props) => {
               initialEditType="wysiwyg"
               useCommandShortcut={true}
               ref={contentsRef}
+              autofocus={false}
             />
           </Box>
           <div
