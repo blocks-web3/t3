@@ -85,7 +85,7 @@ const ProjectDetails: React.FC = () => {
         >
           {project?.proposal?.title ?? "No Title"}
         </Typography>
-        {members && isProjectMember(members, session) && (
+        {members && isProjectMember(members, session) && value === 0 && (
           <Button
             variant="contained"
             size="small"
