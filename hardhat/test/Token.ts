@@ -22,15 +22,17 @@ describe("Token", function () {
     });
 
     it("Users can transfer", async function () {
-      const { token, user1, user2 } = await loadFixture(deployToken);
-      const tx1 = await token.transfer(user1.address, 10);
-      const user1Balance = await token.balanceOf(user1.address);
+      const { token, owner, user1, user2 } = await loadFixture(deployToken);
 
-      expect(user1Balance).to.equal(10);
+      await expect(token.transfer(user1.address, 10)).to.changeTokenBalances(
+        token,
+        [owner, user1],
+        [-10, 10]
+      );
 
-      const tx2 = await token.connect(user1).transfer(user2.address, 10);
-      const user2Balance = await token.balanceOf(user2.address);
-      expect(user1Balance).to.equal(user2Balance);
+      await expect(
+        token.connect(user1).transfer(user2.address, 10)
+      ).to.changeTokenBalances(token, [user1, user2], [-10, 10]);
     });
   });
 });

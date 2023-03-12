@@ -36,6 +36,25 @@ contract T3Governor is
         )
     {}
 
+    function proposeProjectEvaluation(
+        address _projectAddress,
+        string memory _projectID
+    ) public {
+        address[] memory _targets = new address[](1);
+        uint256[] memory _values = new uint256[](1);
+        bytes[] memory _calldatas = new bytes[](1);
+        string memory _description = string.concat(
+            "Propose for evaluating Project: ",
+            _projectID
+        );
+
+        _targets[0] = _projectAddress;
+        _values[0] = 0;
+        _calldatas[0] = abi.encodeWithSignature("makeSucceeded()");
+
+        super.propose(_targets, _values, _calldatas, _description);
+    }
+
     // The functions below are overrides required by Solidity.
     function proposalThreshold()
         public

@@ -1,6 +1,6 @@
-import { ethers } from "hardhat";
+import "@nomicfoundation/hardhat-toolbox";
 
-async () => {
+task("airdrop", "Airdrop time or governance token").setAction(async () => {
   const args = process.argv.slice(2);
   const [owner] = await ethers.getSigners();
   const Token = await ethers.getContractFactory("Lock");
@@ -10,4 +10,4 @@ async () => {
 
   const token = await ethers.getContractAt(args[0], args[1], owner);
   await token.airdrop([owner.address], [1]);
-};
+});
