@@ -12,6 +12,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import FormLabel from "@mui/material/FormLabel";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
 import { useEffect, useRef, useState } from "react";
@@ -106,7 +107,18 @@ const CreatePost: React.FC = () => {
   }
 
   return (
-    <MainContainer heading="Create Post">
+    <MainContainer>
+      <Typography
+        variant="h2"
+        noWrap
+        component="div"
+        css={css`
+          margin: 1rem auto;
+          text-align: center;
+        `}
+      >
+        Create Post
+      </Typography>
       <div
         css={css`
           border: solid 1.5px;
@@ -245,7 +257,12 @@ const CreatePost: React.FC = () => {
                 autofocus={false}
               />
             </Box>
-            <Button type="submit" color="primary" variant="contained">
+            <Button
+              type="submit"
+              size="large"
+              color="primary"
+              variant="contained"
+            >
               Send
             </Button>
           </Stack>
