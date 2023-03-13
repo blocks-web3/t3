@@ -83,6 +83,7 @@ const ProjectDetailsTab = (props: Props) => {
           align="left"
           css={css`
             font-weight: 600;
+            margin-bottom: 1rem;
           `}
         >
           Contents
@@ -135,6 +136,7 @@ const ProjectDetailsTab = (props: Props) => {
             css={css`
               display: flex;
               justify-content: end;
+              margin-top: 1rem;
             `}
           >
             <Button variant="contained" size="large" onClick={onSubmit}>
