@@ -3,7 +3,18 @@ import { deployGovernor } from "../test/common";
 
 async function main() {
   const [owner] = await ethers.getSigners();
-  const t3TokenAddress = "0xUPDATE_ME";
+  const T3Token = await ethers.getContractFactory("T3TimeCoin");
+
+  const coin = await T3Token.deploy(100000000000000);
+  console.log(`T3 time coin address: ${coin.address}`);
+  const t3TimeCoinAddress = coin.address;
+
+  const Token = await ethers.getContractFactory("T3Token");
+  const token = await Token.deploy(100000000000000);
+  const t3TokenAddress = token.address;
+
+  console.log(`T3 token address: ${token.address}`);
+
   const { timelock, governor } = await deployGovernor(
     owner.address,
     t3TokenAddress,
@@ -14,7 +25,7 @@ async function main() {
   );
 
   const Factory = await ethers.getContractFactory("ProjectFactory");
-  const factory = await Factory.deploy(timelock.address);
+  const factory = await Factory.deploy(t3TimeCoinAddress, timelock.address);
 
   console.log(`Timelock address ${timelock.address}`);
   console.log(`Governor address ${governor.address}`);

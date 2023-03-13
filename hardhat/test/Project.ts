@@ -23,7 +23,7 @@ describe("Project", function () {
     await token.airdrop([owner.address], [10]);
 
     const Factory = await ethers.getContractFactory("ProjectFactory");
-    const factory = await Factory.deploy(timelock.address);
+    const factory = await Factory.deploy(token.address, timelock.address);
 
     return { token, factory, governor, owner, user1, user2 };
   }
@@ -35,10 +35,9 @@ describe("Project", function () {
     const period = 4; // expires period - 1 blocks later
 
     it("Create project", async function () {
-      const { token, factory, owner, user1 } = await loadFixture(deployProject);
+      const { factory, owner, user1 } = await loadFixture(deployProject);
 
       const tx = await factory.createProject(
-        token.address,
         projectID,
         projectDescription,
         targetAmount,
@@ -66,7 +65,6 @@ describe("Project", function () {
       await token.transfer(user1.address, 1);
 
       const tx = await factory.createProject(
-        token.address,
         projectID,
         projectDescription,
         targetAmount,
@@ -105,13 +103,7 @@ describe("Project", function () {
       );
       await token.transfer(user1.address, 1);
 
-      await factory.createProject(
-        token.address,
-        projectID,
-        projectDescription,
-        targetAmount,
-        period
-      );
+      await factory.createProject(projectID, projectDescription, targetAmount, period);
       const projectAddress = await factory.projects(projectID);
       const project = await ethers.getContractAt("Project", projectAddress, owner);
 

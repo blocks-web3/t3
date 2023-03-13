@@ -7,6 +7,7 @@ import "./Project.sol";
 
 contract ProjectFactory is Ownable {
     mapping(string => address) public projects;
+    IERC20 public immutable timeToken;
 
     address public executor;
 
@@ -16,7 +17,8 @@ contract ProjectFactory is Ownable {
         address projectAddress
     );
 
-    constructor(address _executor) Ownable() {
+    constructor(IERC20 _timeToken, address _executor) Ownable() {
+        timeToken = _timeToken;
         setExecutor(_executor);
     }
 
@@ -25,14 +27,13 @@ contract ProjectFactory is Ownable {
     }
 
     function createProject(
-        IERC20 _token,
         string memory _id,
         string memory _description,
         uint256 _targetAmount,
         uint256 _period
     ) external returns (address) {
         Project p = new Project(
-            _token,
+            timeToken,
             _id,
             _description,
             _targetAmount,
