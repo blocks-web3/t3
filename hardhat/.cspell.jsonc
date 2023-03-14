@@ -4,11 +4,18 @@
   // language - current active spelling language
   "language": "en",
   // words - list of words to be always considered correct
-  "words": ["nomicfoundation", "timelock"],
+  "words": [
+    "numberish",
+    "nomicfoundation",
+    "timelock",
+    "typechain"
+  ],
   // flagWords - list of words to be always considered incorrect
   // This is useful for offensive words and common spelling errors.
   // For example "hte" should be "the"
-  "flagWords": ["hte"],
+  "flagWords": [
+    "hte"
+  ],
   "ignorePaths": [
     ".git",
     ".gitignore",

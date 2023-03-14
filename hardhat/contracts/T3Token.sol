@@ -3,11 +3,12 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract T3Token is Ownable, ERC20, ERC20Permit, ERC20Votes {
+contract T3Token is Ownable, ERC20, ERC20Burnable, ERC20Permit, ERC20Votes {
     constructor(
         uint256 _initialSupply
     ) ERC20("T3Token", "T3T") ERC20Permit("T3Token") {

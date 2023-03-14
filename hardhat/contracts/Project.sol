@@ -23,12 +23,13 @@ contract Project is Ownable {
     string public ID;
     string public description;
     ProjectStatus public status;
-    uint256 public immutable targetAmount;
 
     mapping(address => uint256) public donors;
     uint256 public donatedAmount;
 
-    Timers.BlockNumber private _deadline;
+    uint256 public immutable fundingTarget;
+    Timers.BlockNumber private _fundingDeadline;
+
     address public executor;
 
     modifier onlyExecutor() {
@@ -40,16 +41,18 @@ contract Project is Ownable {
         IERC20 _token,
         string memory _id,
         string memory _description,
-        uint256 _targetAmount,
-        uint256 _period,
+        uint256 _fundingTarget,
+        uint256 _fundingPeriod,
         address _executor
     ) Ownable() {
         token = _token;
         ID = _id;
         description = _description;
-        targetAmount = _targetAmount;
+        fundingTarget = _fundingTarget;
 
-        _deadline.setDeadline(block.number.toUint64() + _period.toUint64());
+        _fundingDeadline.setDeadline(
+            block.number.toUint64() + _fundingPeriod.toUint64()
+        );
         executor = _executor;
         // NOTE: tx.origin is NOT safe, never use it for authorization
         _transferOwnership(tx.origin);
@@ -88,15 +91,15 @@ contract Project is Ownable {
     }
 
     function isTargetReached() public view returns (bool) {
-        return donatedAmount >= targetAmount;
+        return donatedAmount >= fundingTarget;
     }
 
     function isFundingPending() public view returns (bool) {
-        return _deadline.isPending();
+        return _fundingDeadline.isPending();
     }
 
     function isFundingExpired() public view returns (bool) {
-        return _deadline.isExpired();
+        return _fundingDeadline.isExpired();
     }
 
     function support(uint256 _amount) public {

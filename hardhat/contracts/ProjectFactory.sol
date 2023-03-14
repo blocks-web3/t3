@@ -29,15 +29,15 @@ contract ProjectFactory is Ownable {
     function createProject(
         string memory _id,
         string memory _description,
-        uint256 _targetAmount,
-        uint256 _period
+        uint256 _fundingTarget,
+        uint256 _fundingPeriod
     ) external returns (address) {
         Project p = new Project(
             timeToken,
             _id,
             _description,
-            _targetAmount,
-            _period,
+            _fundingTarget,
+            _fundingPeriod,
             executor
         );
         address _address = address(p);

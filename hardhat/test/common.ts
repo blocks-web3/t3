@@ -1,4 +1,7 @@
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+import { BigNumberish } from "ethers";
 import { ethers } from "hardhat";
+import { T3Governor } from "../typechain-types";
 
 export async function deployGovernor(
   adminAddress: string,
@@ -6,7 +9,7 @@ export async function deployGovernor(
   timelockMinDelay: number,
   votingDelay: number,
   votingPeriod: number,
-  proposalThreshold: number
+  proposalThreshold: BigNumberish
 ) {
   const Timelock = await ethers.getContractFactory("TimelockController");
 
@@ -37,6 +40,34 @@ export async function deployGovernor(
 export async function increaseBlock() {
   await ethers.provider.send("evm_mine", []);
 }
+
+export async function proposeOne(
+  governor: T3Governor,
+  proposer: SignerWithAddress,
+  target: string,
+  calldata: string,
+  description: string
+) {
+  const descriptionHash = ethers.utils.id(description);
+
+  await governor
+    .connect(proposer)
+  ["propose(address[],uint256[],bytes[],string)"](
+    [target],
+    [0],
+    [calldata],
+    description
+  );
+
+  const proposalId = await governor.hashProposal(
+    [target],
+    [0],
+    [calldata],
+    descriptionHash
+  );
+  return { proposalId };
+}
+export const ONE_ETHER = ethers.utils.parseEther("1");
 
 export enum ProposalState {
   Pending,
