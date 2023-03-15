@@ -1,3 +1,7 @@
+import amber from "@mui/material/colors/amber";
+import blue from "@mui/material/colors/blue";
+import lime from "@mui/material/colors/lime";
+import pink from "@mui/material/colors/pink";
 import { Member } from "../../api/types/model";
 
 export const numberFormat = (num: number): string => {
@@ -61,18 +65,18 @@ export const resolveProjectMembers = (members: Member[]) => {
 export const resolveStatus = (status: string) => {
   switch (status) {
     case "PROPOSAL":
-      return "Proposing";
+      return ["Proposing", blue[300]];
     case "VOTE":
-      return "Accepting Vote";
+      return ["Accepting Vote", pink[300]];
     case "IMPLEMENTATION":
-      return "Project On Going";
+      return ["On Going", amber[300]];
     case "EVALUATION":
-      return "Accepting Evaluation";
+      return ["Evaluating", lime[300]];
     case "COMPLETED":
-      return "Project Completed";
+      return ["Completed", pink[900]];
     case "WITHDRAWAL":
-      return "Project Withdrawn";
+      return ["Withdrawn", blue[900]];
     default:
-      break;
+      return ["", ""];
   }
 };

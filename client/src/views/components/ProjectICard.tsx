@@ -6,7 +6,6 @@ import { useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import blue from "@mui/material/colors/blue";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
@@ -69,25 +68,35 @@ export default function ProjectCard(props: Props) {
     >
       <CardContent
         css={css`
-          padding: 2rem;
+          padding: 1rem 1rem 1rem;
+          :last-child {
+            padding-bottom: 1rem;
+          }
         `}
       >
         <Typography
-          variant="h5"
+          color="text.secondary"
+          variant="body2"
+          textAlign={"center"}
           css={css`
             display: inline-block;
-            border-radius: 2rem;
-            background-color: ${theme.palette.primary.light};
-            padding: 0.6rem 1.2rem;
-            /* max-width: 10rem; */
+            border-radius: 3px;
+            background-color: ${resolveStatus(project.status)[1]};
+            padding: 1px 0.4rem;
             color: white;
             text-align: center;
-            margin: 0 0 1rem;
+            min-width: 8rem;
           `}
         >
-          {resolveStatus(project.status)}
+          {resolveStatus(project.status)[0]}
         </Typography>
-        <Typography variant="h2" component="div">
+        <Typography
+          variant="h3"
+          component="div"
+          css={css`
+            margin: 1rem 0;
+          `}
+        >
           {project.proposal?.title ?? ""}
         </Typography>
         <Typography
@@ -98,44 +107,23 @@ export default function ProjectCard(props: Props) {
         >
           {shortenAddress(project.contract_address)}
         </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {project.created_at.toString()}
-        </Typography>
-
-        <Typography variant="h4" component="div">
-          {project.proposal?.title ?? ""}
-        </Typography>
+        <Typography variant="body2">{parsedMarkdown}</Typography>
         <Stack
           direction="row"
           justifyContent={"space-between"}
           alignItems={"center"}
           display={"flex"}
-          sx={{ p: "10px 0px" }}
+          sx={{ p: "10px 0 0" }}
         >
           <Box
             justifyContent={"flex-start"}
             alignItems={"center"}
             display={"flex"}
           >
-            <Typography
-              color="text.secondary"
-              variant="body2"
-              textAlign={"center"}
-              sx={{
-                background: blue[300],
-                color: "white",
-                borderRadius: "3px",
-                padding: "0px 6px",
-                width: "120px",
-              }}
-            >
-              {project.status ?? ""}
-            </Typography>
             <Box
               alignItems={"center"}
               justifyContent={"center"}
               display={"flex"}
-              sx={{ p: "2px", minWidth: "100px" }}
             >
               <HowToVoteIcon sx={{ p: "0px 2px" }}></HowToVoteIcon>
               <Typography variant="body1">
@@ -158,7 +146,6 @@ export default function ProjectCard(props: Props) {
             {new Date(project.created_at).toLocaleString()}
           </Typography>
         </Stack>
-        <Typography variant="body2">{parsedMarkdown}</Typography>
       </CardContent>
     </Card>
   );
