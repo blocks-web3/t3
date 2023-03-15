@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { FormLabel } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import grey from "@mui/material/colors/grey";
@@ -118,6 +117,125 @@ const ProjectDetailsTab = (props: Props) => {
     return session && project?.project_id;
   }, [project?.project_id, session]);
 
+  const dialogItem = (
+    <Dialog
+      open={dialogOpen}
+      maxWidth="sm"
+      fullWidth
+      onClose={handleDialogClose}
+    >
+      <div
+        css={css`
+          padding: 2rem 2rem;
+        `}
+      >
+        <DialogTitle variant="h3">Vote T3 token to this project</DialogTitle>
+        <hr
+          css={css`
+            margin-left: 1rem;
+            margin-right: 1rem;
+          `}
+        />
+        <DialogContent>
+          <Grid
+            container
+            css={css`
+              margin: 2rem 0 3rem;
+            `}
+          >
+            <Grid item xs={6}>
+              <Typography
+                variant="h5"
+                align="left"
+                css={css`
+                  font-weight: 600;
+                `}
+              >
+                My Token Balance
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography
+                variant="h5"
+                align="right"
+                css={css`
+                  white-space: pre-wrap;
+                `}
+              >
+                {`${myT3Balance}  T3`}
+              </Typography>
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            css={css`
+              margin: 2rem 0;
+            `}
+          >
+            <Grid
+              item
+              xs={6}
+              css={css`
+                display: flex;
+                align-items: center;
+              `}
+            >
+              <Typography
+                variant="h5"
+                align="left"
+                css={css`
+                  font-weight: 600;
+                `}
+              >
+                Vote Amount
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                variant="outlined"
+                type="number"
+                autoComplete="off"
+                value={voteTokenInput}
+                css={css`
+                  width: 100%;
+                `}
+                onChange={(event) => setVoteTokenInput(event.target.value)}
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="outlined"
+            size="large"
+            fullWidth
+            onClick={handleDialogClose}
+            css={css`
+              height: 3rem;
+              margin-right: 0.75rem;
+              margin-left: 1rem;
+            `}
+          >
+            Cancel
+          </Button>
+          <Button
+            fullWidth
+            variant="contained"
+            size="large"
+            onClick={onSubmitVoteToken}
+            disabled={!canVote}
+            css={css`
+              margin-right: 1rem;
+              height: 3rem;
+            `}
+          >
+            OK
+          </Button>
+        </DialogActions>
+      </div>
+    </Dialog>
+  );
+
   return (
     <>
       <Box>
@@ -226,48 +344,7 @@ const ProjectDetailsTab = (props: Props) => {
           </div>
         </form>
       </Box>
-      <Dialog open={dialogOpen} onClose={handleDialogClose}>
-        <DialogTitle>Vote to project</DialogTitle>
-        <DialogContent>
-          <FormLabel>{"Title"}</FormLabel>
-          <Typography
-            variant="h4"
-            align="left"
-            css={css`
-              width: 100%;
-            `}
-          >
-            {project?.proposal?.title}
-          </Typography>
-          <FormLabel>{"My Token Balance"}</FormLabel>
-          <Typography
-            variant="h4"
-            align="left"
-            css={css`
-              width: 100%;
-            `}
-          >
-            {myT3Balance}
-          </Typography>
-          <FormLabel>{"Vote Amount"}</FormLabel>
-          <TextField
-            variant="outlined"
-            type="number"
-            autoComplete="off"
-            value={voteTokenInput}
-            css={css`
-              width: 100%;
-            `}
-            onChange={(event) => setVoteTokenInput(event.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={onSubmitVoteToken} disabled={!canVote}>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {dialogItem}
     </>
   );
 };
