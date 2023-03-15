@@ -1,6 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { css, Global } from "@emotion/react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { css, Global, ThemeProvider } from "@emotion/react";
+import {
+  createTheme,
+  ThemeProvider as MuiThemeProvider,
+} from "@mui/material/styles";
 import emotionReset from "emotion-reset";
 import { AuthContextProvider } from "./auth/AuthContext";
 import { LoadingContextProvider } from "./loading/LoadingContext";
@@ -42,42 +45,44 @@ function App() {
   });
 
   return (
-    <ThemeProvider theme={theme}>
-      <AuthContextProvider>
-        <LoadingContextProvider>
-          <div className="App">
-            <Global
-              styles={css`
-                ${emotionReset}
+    <MuiThemeProvider theme={theme}>
+      <ThemeProvider theme={theme}>
+        <AuthContextProvider>
+          <LoadingContextProvider>
+            <div className="App">
+              <Global
+                styles={css`
+                  ${emotionReset}
 
-                *, *::after, *::before {
-                  box-sizing: border-box;
-                  -moz-osx-font-smoothing: grayscale;
-                  -webkit-font-smoothing: antialiased;
-                }
-                body {
-                  margin: 0;
-                  padding: 0;
-                }
-                a {
-                  text-decoration: none;
-                  :visited,
-                  :link {
-                    color: inherit;
+                  *, *::after, *::before {
+                    box-sizing: border-box;
+                    -moz-osx-font-smoothing: grayscale;
+                    -webkit-font-smoothing: antialiased;
                   }
-                }
-                #root {
-                  margin: 0;
-                  padding: 0;
-                  max-width: none;
-                }
-              `}
-            />
-            <LayoutBase />
-          </div>
-        </LoadingContextProvider>
-      </AuthContextProvider>
-    </ThemeProvider>
+                  body {
+                    margin: 0;
+                    padding: 0;
+                  }
+                  a {
+                    text-decoration: none;
+                    :visited,
+                    :link {
+                      color: inherit;
+                    }
+                  }
+                  #root {
+                    margin: 0;
+                    padding: 0;
+                    max-width: none;
+                  }
+                `}
+              />
+              <LayoutBase />
+            </div>
+          </LoadingContextProvider>
+        </AuthContextProvider>
+      </ThemeProvider>
+    </MuiThemeProvider>
   );
 }
 
