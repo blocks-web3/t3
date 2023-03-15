@@ -68,14 +68,12 @@ export const resolveStatus = (status: string) => {
       return ["Proposing", blue[300]];
     case "VOTE":
       return ["Accepting Vote", pink[300]];
-    case "IMPLEMENTATION":
+    case "PROGRESS":
       return ["On Going", amber[300]];
     case "EVALUATION":
       return ["Evaluating", lime[300]];
-    case "COMPLETED":
-      return ["Completed", pink[900]];
-    case "WITHDRAWAL":
-      return ["Withdrawn", blue[900]];
+    case "CLOSE":
+      return ["Closed", pink[900]];
     default:
       return ["", ""];
   }
