@@ -1,3 +1,9 @@
+import amber from "@mui/material/colors/amber";
+import blue from "@mui/material/colors/blue";
+import lime from "@mui/material/colors/lime";
+import pink from "@mui/material/colors/pink";
+import { Member } from "../../api/types/model";
+
 export const numberFormat = (num: number): string => {
   return num.toLocaleString();
 };
@@ -31,4 +37,44 @@ export const shortenAddress = (
     "..." +
     val.substring(val.length - rightWordNum)
   );
+};
+
+export const resolveProjectMembers = (members: Member[]) => {
+  let result = "";
+  members
+    .sort((a, b) => (b.member_role === "PROPOSER" ? 1 : -1))
+    .forEach((member: Member) => {
+      if (result) {
+        result += ", ";
+      }
+      switch (member.member_role) {
+        case "PROPOSER":
+          result += `P.${member.member_name}`;
+          break;
+        case "COLLABORATOR":
+          result += `C.${member.member_name}`;
+          break;
+        default:
+          result += `${member.member_name}`;
+          break;
+      }
+    });
+  return result;
+};
+
+export const resolveStatus = (status: string) => {
+  switch (status) {
+    case "PROPOSAL":
+      return ["Proposing", blue[300]];
+    case "VOTE":
+      return ["Accepting Vote", pink[300]];
+    case "PROGRESS":
+      return ["On Going", amber[300]];
+    case "EVALUATION":
+      return ["Evaluating", lime[300]];
+    case "CLOSE":
+      return ["Closed", pink[900]];
+    default:
+      return ["", ""];
+  }
 };
