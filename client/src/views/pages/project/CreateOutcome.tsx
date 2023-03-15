@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import FormLabel from "@mui/material/FormLabel";
 import Stack from "@mui/material/Stack";
-import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -18,6 +17,7 @@ import { useSession } from "../../../auth/AuthContext";
 import { isProjectMember } from "../../../lib/utils/validator";
 import { useLoading } from "../../../loading/LoadingContext";
 import MainContainer from "../../components/MainContainer";
+import "../../css/toastui-editor.css";
 
 const CreateOutcome: React.FC = () => {
   const { session } = useSession();

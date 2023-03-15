@@ -8,6 +8,7 @@ import CreateOutcome from "../pages/project/CreateOutcome";
 import CreatePost from "../pages/project/CreatePost";
 import ProjectDetails from "../pages/project/ProjectDetails";
 import ProjectList from "../pages/project/ProjectList";
+import Sample from "../pages/test/sample";
 import Mypage from "../pages/user/Mypage";
 import VoteHistory from "../pages/user/mypage/VoteHistory";
 
@@ -34,6 +35,7 @@ const LayoutBase: React.FC = () => {
             <Route path="" element={<Mypage />} />
             <Route path="vote-history" element={<VoteHistory />} />
           </Route>
+          <Route path="/sample" element={<Sample />}></Route>
         </Routes>
         {(!session || isLoading) && <LoadingMask></LoadingMask>}
       </SideMenu>

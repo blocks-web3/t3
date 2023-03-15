@@ -12,7 +12,6 @@ import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor, Viewer } from "@toast-ui/react-editor";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -30,6 +29,7 @@ import {
 import { isProjectMember } from "../../lib/utils/validator";
 import { useLoading } from "../../loading/LoadingContext";
 import { t3BalanceOf, voteT3Token } from "../../wallet/wallet-util";
+import "../css/toastui-editor.css";
 
 interface Props {
   project: Project | undefined;

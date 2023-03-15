@@ -1,6 +1,7 @@
 import { KmsEthersSigner } from "aws-kms-ethers-signer";
 import BigNumber from "bignumber.js";
 import * as ethers from "ethers";
+import { formatEther } from "ethers/lib/utils";
 import { Session, StsCredentials } from "../auth/AuthContext";
 import { projectAbi, projectFactoryAbi, t3TokenAbi } from "./abis";
 
@@ -31,6 +32,7 @@ type ProjectCreatedEvent = {
 export function createProjectContract(
   session: Session,
   projectId: string,
+  requiredToken: number,
   period: number
 ): Promise<ProjectCreatedEvent> {
   return new Promise((resolve, reject) => {
@@ -54,9 +56,13 @@ export function createProjectContract(
 
     try {
       factoryContract.createProject(
-        import.meta.env.VITE_T3_TOKEN_CONTRACT_ADDRESS,
         projectId,
-        period
+        " ", //(説明文はコントラクトに登録するにはかなり長いので登録しない),
+        requiredToken,
+        period,
+        {
+          gasLimit: 10000000,
+        }
       );
     } catch (error) {
       console.error(error);
@@ -75,8 +81,8 @@ export async function t3BalanceOf(
     getSigner(session)
   );
   try {
-    const balance = (await contract.balanceOf(address)) as BigNumber;
-    return balance.toNumber();
+    const balance = (await contract.balanceOf(address)) as ethers.BigNumber;
+    return Number(formatEther(balance.toString()));
   } catch (error) {
     console.error(error);
     throw error;
