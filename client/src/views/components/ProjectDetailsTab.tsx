@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
+import { Card, CardContent } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import grey from "@mui/material/colors/grey";
@@ -245,6 +246,7 @@ const ProjectDetailsTab = (props: Props) => {
         <div
           css={css`
             display: flex;
+            margin: 1.5rem auto 3rem;
           `}
         >
           {members && isProjectMember(members, session) ? (
@@ -253,7 +255,6 @@ const ProjectDetailsTab = (props: Props) => {
               fullWidth
               css={css`
                 border-radius: 2rem;
-
                 height: 3rem;
                 margin-left: auto;
               `}
@@ -341,7 +342,7 @@ const ProjectDetailsTab = (props: Props) => {
           variant="h4"
           align="left"
           css={css`
-            margin: 2rem 0;
+            margin: 4rem 0 0.5rem;
             width: 100%;
           `}
         >
@@ -385,32 +386,44 @@ const CommentItem = (props: { comment: Comment }) => {
   const { comment } = props;
   return (
     <div>
-      <Box
-        css={{
-          borderWidth: "1px",
-          borderColor: grey[400],
-          borderStyle: "solid",
-          borderRadius: "4px",
-          padding: "16.5px 14px;",
-        }}
-      >
-        <Viewer initialValue={comment.comment} usageStatistics={false}></Viewer>
-      </Box>
-      <Box
-        css={css`
-          display: flex;
-          margin: 0.5rem 0.5rem 3rem 0.5rem;
-        `}
-      >
-        <Typography variant="h6">{`${comment.author_name} (${comment.author_address})`}</Typography>
-        <Typography
+      <Card sx={{ minWidth: 275, margin: "1rem auto" }}>
+        <CardContent
           css={css`
-            margin-left: auto;
+            padding: 1rem 1rem 0.5rem;
+            :last-child {
+              padding-bottom: 0.5rem;
+            }
           `}
         >
-          {formatIsoStringWithTime(comment.created_at)}
-        </Typography>
-      </Box>
+          <Box>
+            <Viewer
+              initialValue={comment.comment}
+              usageStatistics={false}
+            ></Viewer>
+          </Box>
+          <div
+            css={css`
+              height: 1px;
+              background-color: ${grey[300]};
+              margin: 1rem auto 0;
+            `}
+          ></div>
+          <Box
+            css={css`
+              display: flex;
+            `}
+          >
+            <Typography variant="h6">{`${comment.author_name} (${comment.author_address})`}</Typography>
+            <Typography
+              css={css`
+                margin-left: auto;
+              `}
+            >
+              {formatIsoStringWithTime(comment.created_at)}
+            </Typography>
+          </Box>
+        </CardContent>
+      </Card>
     </div>
   );
 };
