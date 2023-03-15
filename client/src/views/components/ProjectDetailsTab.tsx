@@ -23,7 +23,10 @@ import {
 } from "../../api/comment";
 import { Comment, Member, Project } from "../../api/types/model";
 import { useSession } from "../../auth/AuthContext";
-import { formatIsoStringWithTime } from "../../lib/utils/format-util";
+import {
+  formatIsoStringWithTime,
+  resolveProjectMembers,
+} from "../../lib/utils/format-util";
 import { isProjectMember } from "../../lib/utils/validator";
 import { useLoading } from "../../loading/LoadingContext";
 import { t3BalanceOf, voteT3Token } from "../../wallet/wallet-util";
@@ -470,29 +473,6 @@ const ProjectItem = (props: {
       </Grid>
     </Grid>
   );
-};
-
-const resolveProjectMembers = (members: Member[]) => {
-  let result = "";
-  members
-    .sort((a, b) => (b.member_role === "PROPOSER" ? 1 : -1))
-    .forEach((member: Member) => {
-      if (result) {
-        result += ", ";
-      }
-      switch (member.member_role) {
-        case "PROPOSER":
-          result += `P.${member.member_name}`;
-          break;
-        case "COLLABORATOR":
-          result += `C.${member.member_name}`;
-          break;
-        default:
-          result += `${member.member_name}`;
-          break;
-      }
-    });
-  return result;
 };
 
 export default ProjectDetailsTab;

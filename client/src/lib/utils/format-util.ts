@@ -1,3 +1,5 @@
+import { Member } from "../../api/types/model";
+
 export const numberFormat = (num: number): string => {
   return num.toLocaleString();
 };
@@ -31,4 +33,46 @@ export const shortenAddress = (
     "..." +
     val.substring(val.length - rightWordNum)
   );
+};
+
+export const resolveProjectMembers = (members: Member[]) => {
+  let result = "";
+  members
+    .sort((a, b) => (b.member_role === "PROPOSER" ? 1 : -1))
+    .forEach((member: Member) => {
+      if (result) {
+        result += ", ";
+      }
+      switch (member.member_role) {
+        case "PROPOSER":
+          result += `P.${member.member_name}`;
+          break;
+        case "COLLABORATOR":
+          result += `C.${member.member_name}`;
+          break;
+        default:
+          result += `${member.member_name}`;
+          break;
+      }
+    });
+  return result;
+};
+
+export const resolveStatus = (status: string) => {
+  switch (status) {
+    case "PROPOSAL":
+      return "Proposing";
+    case "VOTE":
+      return "Accepting Vote";
+    case "IMPLEMENTATION":
+      return "Project On Going";
+    case "EVALUATION":
+      return "Accepting Evaluation";
+    case "COMPLETED":
+      return "Project Completed";
+    case "WITHDRAWAL":
+      return "Project Withdrawn";
+    default:
+      break;
+  }
 };
