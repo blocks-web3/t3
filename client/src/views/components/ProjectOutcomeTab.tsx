@@ -17,18 +17,19 @@ const ProjectOutcomeTab = (props: Props) => {
   const { project } = props;
   const [evaluated, setEvaluated] = useState(false);
 
-  const evaluation = {
-    for: {
-      val: 25,
-    },
-    against: {
-      val: 175,
-    },
-    total: 200,
+  const evaluationConst = {
+    for: 4,
+    against: 9,
   };
+  const [evaluation, setEvaluation] = useState(evaluationConst);
 
   const handleEvaluation = (isFor: boolean) => {
     // evaluate method should be called here!!
+    if (isFor) {
+      setEvaluation((prev) => ({ ...prev, for: prev.for + 1 }));
+    } else {
+      setEvaluation((prev) => ({ ...prev, against: prev.against + 1 }));
+    }
     setEvaluated(true);
   };
 
@@ -55,7 +56,7 @@ const ProjectOutcomeTab = (props: Props) => {
             align-items: center;
           `}
         >
-          <Typography
+          {/* <Typography
             variant="h5"
             align="left"
             css={css`
@@ -63,14 +64,15 @@ const ProjectOutcomeTab = (props: Props) => {
             `}
           >
             {"Let's evaluate this project!! -> -> ->"}
-          </Typography>
+          </Typography> */}
           <div>
             <Button
               variant="contained"
               css={css`
                 height: 3rem;
-                width: 6rem;
-                margin-right: 1rem;
+                width: 10rem;
+                border-radius: 2rem;
+                margin-right: 1.5rem;
               `}
               onClick={() => handleEvaluation(true)}
               disabled={evaluated}
@@ -82,7 +84,8 @@ const ProjectOutcomeTab = (props: Props) => {
               color="secondary"
               css={css`
                 height: 3rem;
-                width: 6rem;
+                width: 10rem;
+                border-radius: 2rem;
               `}
               onClick={() => handleEvaluation(false)}
               disabled={evaluated}
@@ -110,7 +113,9 @@ const ProjectOutcomeTab = (props: Props) => {
         <Box css={css``}>
           <LinearProgress
             variant="determinate"
-            value={(evaluation.for.val / evaluation.total) * 100}
+            value={
+              (evaluation.for / (evaluation.for + evaluation.against)) * 100
+            }
             color="primary"
             css={css`
               height: 1.5rem;
@@ -125,13 +130,18 @@ const ProjectOutcomeTab = (props: Props) => {
           >
             <Typography variant="h6" css={css``}>
               {`Accept: ${
-                Math.floor((evaluation.for.val / evaluation.total) * 1000) / 10
+                Math.floor(
+                  (evaluation.for / (evaluation.for + evaluation.against)) *
+                    1000
+                ) / 10
               } %`}
             </Typography>
             <Typography variant="h6" css={css``}>
               {`Reject: ${
-                Math.floor((evaluation.against.val / evaluation.total) * 1000) /
-                10
+                Math.floor(
+                  (evaluation.against / (evaluation.for + evaluation.against)) *
+                    1000
+                ) / 10
               } %`}
             </Typography>
           </Box>

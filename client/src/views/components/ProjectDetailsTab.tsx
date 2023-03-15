@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { FormLabel } from "@mui/material";
+import { Card, CardContent } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import grey from "@mui/material/colors/grey";
@@ -15,6 +15,7 @@ import Typography from "@mui/material/Typography";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor, Viewer } from "@toast-ui/react-editor";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   CommentInput,
   createComment,
@@ -23,6 +24,7 @@ import {
 import { Comment, Member, Project } from "../../api/types/model";
 import { useSession } from "../../auth/AuthContext";
 import { formatIsoStringWithTime } from "../../lib/utils/format-util";
+import { isProjectMember } from "../../lib/utils/validator";
 import { useLoading } from "../../loading/LoadingContext";
 import { t3BalanceOf, voteT3Token } from "../../wallet/wallet-util";
 
@@ -37,6 +39,7 @@ const ProjectDetailsTab = (props: Props) => {
   const [votedT3Balance, setVotedT3Balance] = useState<number>(0);
   const contentsRef = useRef<Editor>(null);
   const { session } = useSession();
+  const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [myT3Balance, setMyT3Balance] = useState(0);
   const [voteTokenInput, setVoteTokenInput] = useState("");
@@ -118,18 +121,166 @@ const ProjectDetailsTab = (props: Props) => {
     return session && project?.project_id;
   }, [project?.project_id, session]);
 
+  const dialogItem = (
+    <Dialog
+      open={dialogOpen}
+      maxWidth="sm"
+      fullWidth
+      onClose={handleDialogClose}
+    >
+      <div
+        css={css`
+          padding: 2rem 2rem;
+        `}
+      >
+        <DialogTitle variant="h3">Vote T3 token to this project</DialogTitle>
+        <hr
+          css={css`
+            margin-left: 1rem;
+            margin-right: 1rem;
+          `}
+        />
+        <DialogContent>
+          <Grid
+            container
+            css={css`
+              margin: 2rem 0 3rem;
+            `}
+          >
+            <Grid item xs={6}>
+              <Typography
+                variant="h5"
+                align="left"
+                css={css`
+                  font-weight: 600;
+                `}
+              >
+                My Token Balance
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography
+                variant="h5"
+                align="right"
+                css={css`
+                  white-space: pre-wrap;
+                `}
+              >
+                {`${myT3Balance}  T3`}
+              </Typography>
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            css={css`
+              margin: 2rem 0;
+            `}
+          >
+            <Grid
+              item
+              xs={6}
+              css={css`
+                display: flex;
+                align-items: center;
+              `}
+            >
+              <Typography
+                variant="h5"
+                align="left"
+                css={css`
+                  font-weight: 600;
+                `}
+              >
+                Vote Amount
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                variant="outlined"
+                type="number"
+                autoComplete="off"
+                value={voteTokenInput}
+                css={css`
+                  width: 100%;
+                `}
+                onChange={(event) => setVoteTokenInput(event.target.value)}
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="outlined"
+            size="large"
+            fullWidth
+            onClick={handleDialogClose}
+            css={css`
+              height: 3rem;
+              margin-right: 0.75rem;
+              margin-left: 1rem;
+            `}
+          >
+            Cancel
+          </Button>
+          <Button
+            fullWidth
+            variant="contained"
+            size="large"
+            onClick={onSubmitVoteToken}
+            disabled={!canVote}
+            css={css`
+              margin-right: 1rem;
+              height: 3rem;
+            `}
+          >
+            OK
+          </Button>
+        </DialogActions>
+      </div>
+    </Dialog>
+  );
+
   return (
     <>
       <Box>
-        <Box>
-          <Button
-            variant="contained"
-            size="medium"
-            onClick={onSubmitVoteDialogOpen}
-          >
-            Vote
-          </Button>
-        </Box>
+        <div
+          css={css`
+            display: flex;
+            margin: 1.5rem auto 3rem;
+          `}
+        >
+          {members && isProjectMember(members, session) ? (
+            <Button
+              variant="outlined"
+              fullWidth
+              css={css`
+                border-radius: 2rem;
+                height: 3rem;
+                margin-left: auto;
+              `}
+              onClick={() =>
+                navigate(
+                  `/project/details/${project?.project_id}/create-outcome`
+                )
+              }
+            >
+              Post Outcome
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              fullWidth
+              css={css`
+                border-radius: 2rem;
+                height: 3rem;
+                margin-left: auto;
+              `}
+              onClick={onSubmitVoteDialogOpen}
+            >
+              Vote
+            </Button>
+          )}
+        </div>
         <ProjectItem
           label="Members"
           value={members ? resolveProjectMembers(members) : "TBD"}
@@ -191,7 +342,7 @@ const ProjectDetailsTab = (props: Props) => {
           variant="h4"
           align="left"
           css={css`
-            margin: 2rem 0;
+            margin: 4rem 0 0.5rem;
             width: 100%;
           `}
         >
@@ -226,48 +377,7 @@ const ProjectDetailsTab = (props: Props) => {
           </div>
         </form>
       </Box>
-      <Dialog open={dialogOpen} onClose={handleDialogClose}>
-        <DialogTitle>Vote to project</DialogTitle>
-        <DialogContent>
-          <FormLabel>{"Title"}</FormLabel>
-          <Typography
-            variant="h4"
-            align="left"
-            css={css`
-              width: 100%;
-            `}
-          >
-            {project?.proposal?.title}
-          </Typography>
-          <FormLabel>{"My Token Balance"}</FormLabel>
-          <Typography
-            variant="h4"
-            align="left"
-            css={css`
-              width: 100%;
-            `}
-          >
-            {myT3Balance}
-          </Typography>
-          <FormLabel>{"Vote Amount"}</FormLabel>
-          <TextField
-            variant="outlined"
-            type="number"
-            autoComplete="off"
-            value={voteTokenInput}
-            css={css`
-              width: 100%;
-            `}
-            onChange={(event) => setVoteTokenInput(event.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={onSubmitVoteToken} disabled={!canVote}>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {dialogItem}
     </>
   );
 };
@@ -276,32 +386,44 @@ const CommentItem = (props: { comment: Comment }) => {
   const { comment } = props;
   return (
     <div>
-      <Box
-        css={{
-          borderWidth: "1px",
-          borderColor: grey[400],
-          borderStyle: "solid",
-          borderRadius: "4px",
-          padding: "16.5px 14px;",
-        }}
-      >
-        <Viewer initialValue={comment.comment} usageStatistics={false}></Viewer>
-      </Box>
-      <Box
-        css={css`
-          display: flex;
-          margin: 0.5rem 0.5rem 3rem 0.5rem;
-        `}
-      >
-        <Typography variant="h6">{`${comment.author_name} (${comment.author_address})`}</Typography>
-        <Typography
+      <Card sx={{ minWidth: 275, margin: "1rem auto" }}>
+        <CardContent
           css={css`
-            margin-left: auto;
+            padding: 1rem 1rem 0.5rem;
+            :last-child {
+              padding-bottom: 0.5rem;
+            }
           `}
         >
-          {formatIsoStringWithTime(comment.created_at)}
-        </Typography>
-      </Box>
+          <Box>
+            <Viewer
+              initialValue={comment.comment}
+              usageStatistics={false}
+            ></Viewer>
+          </Box>
+          <div
+            css={css`
+              height: 1px;
+              background-color: ${grey[300]};
+              margin: 1rem auto 0;
+            `}
+          ></div>
+          <Box
+            css={css`
+              display: flex;
+            `}
+          >
+            <Typography variant="h6">{`${comment.author_name} (${comment.author_address})`}</Typography>
+            <Typography
+              css={css`
+                margin-left: auto;
+              `}
+            >
+              {formatIsoStringWithTime(comment.created_at)}
+            </Typography>
+          </Box>
+        </CardContent>
+      </Card>
     </div>
   );
 };

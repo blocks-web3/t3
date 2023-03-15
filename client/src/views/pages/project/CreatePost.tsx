@@ -6,13 +6,11 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
-import grey from "@mui/material/colors/grey";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import FormLabel from "@mui/material/FormLabel";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
 import { useEffect, useRef, useState } from "react";
@@ -107,26 +105,10 @@ const CreatePost: React.FC = () => {
   }
 
   return (
-    <MainContainer>
-      <Typography
-        variant="h2"
-        noWrap
-        component="div"
-        css={css`
-          margin: 1rem auto;
-          text-align: center;
-        `}
-      >
-        Create Post
-      </Typography>
+    <MainContainer title="Create Post">
       <div
         css={css`
-          border: solid 1.5px;
-          border-radius: 10px;
-          border-color: ${grey[300]};
-          padding: 2rem;
-          justify-content: start;
-          display: flex;
+          margin-top: 2rem;
         `}
       >
         <form action="submit" onSubmit={handleSubmit(handleFormOnSubmit)}>

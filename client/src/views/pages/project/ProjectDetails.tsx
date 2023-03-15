@@ -1,18 +1,12 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import grey from "@mui/material/colors/grey";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getProjectByID, getProjectMembersByID } from "../../../api/project";
 import { Member, Project } from "../../../api/types/model";
-import { useSession } from "../../../auth/AuthContext";
-import { isProjectMember } from "../../../lib/utils/validator";
 import TabPanel from "../../components/atoms/TabPanel";
 import MainContainer from "../../components/MainContainer";
 import ProjectDetailsTab from "../../components/ProjectDetailsTab";
@@ -35,8 +29,6 @@ const ProjectDetails: React.FC = () => {
   const [project, setProject] = useState<Project>();
   const [members, setMembers] = useState<Member[]>();
   const { projectId } = useParams();
-  const navigate = useNavigate();
-  const { session } = useSession();
 
   useEffect(() => {
     if (!projectId) return;
@@ -59,48 +51,7 @@ const ProjectDetails: React.FC = () => {
     setValue(newValue);
   };
   return (
-    <MainContainer
-      containerCss={css`
-        border: solid 1.5px;
-        border-radius: 10px;
-        border-color: ${grey[300]};
-        padding: 2rem;
-      `}
-    >
-      <div
-        css={css`
-          display: flex;
-          justify-content: start;
-          align-items: center;
-        `}
-      >
-        <Typography
-          variant="h2"
-          noWrap
-          component="div"
-          css={css`
-            margin: 1rem 0;
-            text-align: left;
-          `}
-        >
-          {project?.proposal?.title ?? "No Title"}
-        </Typography>
-        {members && isProjectMember(members, session) && value === 0 && (
-          <Button
-            variant="contained"
-            size="small"
-            css={css`
-              height: 3rem;
-              margin-left: auto;
-            `}
-            onClick={() =>
-              navigate(`/project/details/${projectId}/create-outcome`)
-            }
-          >
-            Ready to post outcome?
-          </Button>
-        )}
-      </div>
+    <MainContainer title={project?.proposal?.title ?? ""}>
       <div>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs

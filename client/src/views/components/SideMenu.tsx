@@ -7,9 +7,11 @@ import GavelIcon from "@mui/icons-material/Gavel";
 import HowToVoteIcon from "@mui/icons-material/HowToVote";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useTheme } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
@@ -22,11 +24,13 @@ import ListItemText from "@mui/material/ListItemText";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CognitoAuthApi } from "../../auth/auth-api";
 import { clearSession, useSession } from "../../auth/AuthContext";
+import { shortenAddress } from "../../lib/utils/format-util";
 
 const drawerWidth = 354;
 
@@ -43,9 +47,21 @@ interface Props {
 export default function SideMenu(props: Props) {
   const { window, children, title } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+
   const { session } = useSession();
 
   const navigate = useNavigate();
+  const theme = useTheme();
+
+  const handleTooltipClose = () => setOpen(false);
+
+  const handleTooltipOpen = () => {
+    setOpen(true);
+    if (navigator.clipboard) {
+      return navigator.clipboard.writeText(session?.address ?? "");
+    }
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -142,6 +158,41 @@ export default function SideMenu(props: Props) {
     </div>
   );
 
+  const displayAddress = (
+    <ClickAwayListener onClickAway={handleTooltipClose}>
+      <div>
+        <Tooltip
+          onClose={handleTooltipClose}
+          open={open}
+          disableFocusListener
+          disableHoverListener
+          disableTouchListener
+          title="Copied!"
+        >
+          <div
+            onClick={handleTooltipOpen}
+            css={css`
+              padding: 0.75rem 1.5rem;
+              border-radius: 2rem;
+              background-color: ${theme.palette.primary.dark};
+              margin-right: 1rem;
+              cursor: pointer;
+              :hover {
+                opacity: 0.7;
+              }
+              :active {
+                background-color: ${theme.palette.primary.light};
+                border: 2px solid ${theme.palette.primary.dark};
+              }
+            `}
+          >
+            {shortenAddress(session?.address)}
+          </div>
+        </Tooltip>
+      </div>
+    </ClickAwayListener>
+  );
+
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
@@ -165,12 +216,20 @@ export default function SideMenu(props: Props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h2" noWrap component="div">
+          <Typography
+            variant="h2"
+            noWrap
+            component="div"
+            css={css`
+              margin-right: auto;
+            `}
+          >
             {title ?? ""}
           </Typography>
+          {displayAddress}
           <div
             css={css`
-              margin-left: auto;
+              /* margin-left: auto; */
             `}
           >
             <IconButton
