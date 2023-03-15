@@ -1,13 +1,20 @@
 /** @jsxImportSource @emotion/react */
-import { css, SerializedStyles } from "@emotion/react";
+import { css } from "@emotion/react";
+import { FormLabel } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import grey from "@mui/material/colors/grey";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
+import LinearProgress from "@mui/material/LinearProgress";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor, Viewer } from "@toast-ui/react-editor";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   CommentInput,
   createComment,
@@ -15,10 +22,9 @@ import {
 } from "../../api/comment";
 import { Comment, Member, Project } from "../../api/types/model";
 import { useSession } from "../../auth/AuthContext";
-import {
-  formatIsoStringWithTime,
-  numberFormat,
-} from "../../lib/utils/format-util";
+import { formatIsoStringWithTime } from "../../lib/utils/format-util";
+import { useLoading } from "../../loading/LoadingContext";
+import { t3BalanceOf, voteT3Token } from "../../wallet/wallet-util";
 
 interface Props {
   project: Project | undefined;
@@ -28,20 +34,47 @@ interface Props {
 const ProjectDetailsTab = (props: Props) => {
   const { project, members } = props;
   const [comments, setComments] = useState<Comment[]>([]);
+  const [votedT3Balance, setVotedT3Balance] = useState<number>(0);
   const contentsRef = useRef<Editor>(null);
   const { session } = useSession();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [myT3Balance, setMyT3Balance] = useState(0);
+  const [voteTokenInput, setVoteTokenInput] = useState("");
+  const { setLoading } = useLoading();
+
+  const refreshBalance = useCallback(() => {
+    if (session) {
+      t3BalanceOf(session, project!.contract_address).then((balance) => {
+        setVotedT3Balance(balance);
+      });
+      t3BalanceOf(session, session?.address).then((balance) => {
+        setMyT3Balance(balance);
+      });
+    }
+  }, [project, session]);
 
   useEffect(() => {
     if (!project) return;
     const fetch = async () => {
-      const comments = await getCommentsByProjectId(project!.project_id);
-      if (!comments) return;
-      setComments(comments);
+      getCommentsByProjectId(project!.project_id).then((comments) => {
+        if (comments) {
+          setComments(comments);
+        }
+      });
+      refreshBalance();
     };
     fetch();
-  }, [project, props.project]);
+  }, [project, refreshBalance, session]);
 
-  const onSubmit = async () => {
+  const voteProgress = useMemo(() => {
+    const number =
+      votedT3Balance && project?.proposal?.required_token_number
+        ? (votedT3Balance / project.proposal.required_token_number) * 100
+        : 0;
+    return Math.min(number, 100);
+  }, [project?.proposal?.required_token_number, votedT3Balance]);
+
+  const onSubmitComment = async () => {
     const markdown = contentsRef.current?.getInstance().getMarkdown();
     if (!markdown) return;
     const req: CommentInput = {
@@ -49,34 +82,82 @@ const ProjectDetailsTab = (props: Props) => {
       session: session!,
       comment: markdown,
     };
-    const data = await createComment(req);
-    if (!data) return;
-    setComments((prev) => [...prev, data]);
+    try {
+      setLoading(true);
+      const data = await createComment(req);
+      if (!data) return;
+      setComments((prev) => [...prev, data]);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const onSubmitVoteDialogOpen = async () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = async () => {
+    setDialogOpen(false);
+  };
+
+  const onSubmitVoteToken = async () => {
+    const value = Number.parseInt(voteTokenInput);
+    if (canVote()) {
+      try {
+        setLoading(true);
+        await voteT3Token(session!, project!.contract_address, value);
+        setDialogOpen(false);
+        refreshBalance();
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const canVote = useCallback(() => {
+    return session && project?.project_id;
+  }, [project?.project_id, session]);
 
   return (
     <>
       <Box>
+        <Box>
+          <Button
+            variant="contained"
+            size="medium"
+            onClick={onSubmitVoteDialogOpen}
+          >
+            Vote
+          </Button>
+        </Box>
         <ProjectItem
-          label="Project Members"
+          label="Members"
           value={members ? resolveProjectMembers(members) : "TBD"}
         ></ProjectItem>
-        <ProjectItem label="Token Shares">
-          <ProjectSubItem
-            label="Required Token"
-            value={`${
-              project?.proposal?.required_token_number
-                ? numberFormat(project?.proposal?.required_token_number)
-                : "-"
-            } T3`}
-          ></ProjectSubItem>
-          <ProjectSubItem
-            label="Collected Token"
-            value={`- T3`}
-            css={css`
-              margin: 2rem;
-            `}
-          ></ProjectSubItem>
+        <ProjectItem label="Token">
+          <Box sx={{ position: "relative" }}>
+            <LinearProgress
+              variant="determinate"
+              value={voteProgress}
+              sx={{
+                height: 24,
+                borderRadius: 5,
+                position: "absolute",
+                width: "100%",
+              }}
+            />
+            <Typography
+              variant="h5"
+              align="center"
+              color={"white"}
+              sx={{
+                position: "absolute",
+                left: "45%", // いい感じで中央に寄るようにする
+              }}
+            >
+              {votedT3Balance}/{project?.proposal?.required_token_number}
+            </Typography>
+          </Box>
         </ProjectItem>
         <Typography
           variant="h5"
@@ -122,7 +203,7 @@ const ProjectDetailsTab = (props: Props) => {
         <form action="submit">
           <Box>
             <Editor
-              initialValue=" "
+              initialValue=" " // 初期値がnullだと謎のデフォルト値が入るのでスペースを入れておく
               usageStatistics={false}
               previewStyle="vertical"
               height="auto"
@@ -139,12 +220,54 @@ const ProjectDetailsTab = (props: Props) => {
               margin-top: 1rem;
             `}
           >
-            <Button variant="contained" size="large" onClick={onSubmit}>
+            <Button variant="contained" size="large" onClick={onSubmitComment}>
               Comment
             </Button>
           </div>
         </form>
       </Box>
+      <Dialog open={dialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>Vote to project</DialogTitle>
+        <DialogContent>
+          <FormLabel>{"Title"}</FormLabel>
+          <Typography
+            variant="h4"
+            align="left"
+            css={css`
+              width: 100%;
+            `}
+          >
+            {project?.proposal?.title}
+          </Typography>
+          <FormLabel>{"My Token Balance"}</FormLabel>
+          <Typography
+            variant="h4"
+            align="left"
+            css={css`
+              width: 100%;
+            `}
+          >
+            {myT3Balance}
+          </Typography>
+          <FormLabel>{"Vote Amount"}</FormLabel>
+          <TextField
+            variant="outlined"
+            type="number"
+            autoComplete="off"
+            value={voteTokenInput}
+            css={css`
+              width: 100%;
+            `}
+            onChange={(event) => setVoteTokenInput(event.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose}>Cancel</Button>
+          <Button onClick={onSubmitVoteToken} disabled={!canVote}>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
@@ -222,33 +345,6 @@ const ProjectItem = (props: {
         ) : (
           <>{children}</>
         )}
-      </Grid>
-    </Grid>
-  );
-};
-
-const ProjectSubItem = (props: {
-  label: string;
-  value: string;
-  css?: SerializedStyles;
-}) => {
-  const { label, value } = props;
-  return (
-    <Grid
-      container
-      css={css`
-        margin-bottom: 1rem;
-      `}
-    >
-      <Grid item xs={3}>
-        <Typography variant="h5" align="left" css={css``}>
-          {`${label}: `}
-        </Typography>
-      </Grid>
-      <Grid item xs={3}>
-        <Typography variant="h5" align="right" css={css``}>
-          {value}
-        </Typography>
       </Grid>
     </Grid>
   );

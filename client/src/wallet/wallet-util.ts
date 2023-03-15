@@ -2,7 +2,7 @@ import { KmsEthersSigner } from "aws-kms-ethers-signer";
 import BigNumber from "bignumber.js";
 import * as ethers from "ethers";
 import { Session, StsCredentials } from "../auth/AuthContext";
-import { projectFactoryAbi } from "./abis";
+import { projectAbi, projectFactoryAbi, t3TokenAbi } from "./abis";
 
 export async function getAddress(
   userId: string,
@@ -63,6 +63,43 @@ export function createProjectContract(
       reject(error);
     }
   });
+}
+
+export async function t3BalanceOf(
+  session: Session,
+  address: string
+): Promise<number> {
+  const contract = new ethers.Contract(
+    import.meta.env.VITE_T3_TOKEN_CONTRACT_ADDRESS,
+    t3TokenAbi,
+    getSigner(session)
+  );
+  try {
+    const balance = (await contract.balanceOf(address)) as BigNumber;
+    return balance.toNumber();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function voteT3Token(
+  session: Session,
+  projectAddress: string,
+  value: number
+) {
+  const contract = new ethers.Contract(
+    projectAddress,
+    projectAbi,
+    getSigner(session)
+  );
+
+  try {
+    await contract.support(value, { gasLimit: 100000 });
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 export function getSigner(session: Session) {

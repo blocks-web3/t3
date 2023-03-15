@@ -15,6 +15,7 @@ export interface Result {
 export interface Project {
   project_id: string;
   project_member_address: string;
+  contract_address: string;
   type: "pj" | "user";
   quarter: string;
   status: string;

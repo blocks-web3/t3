@@ -112,21 +112,23 @@ export const postProject = async (input: PostProjectInput) => {
     },
   };
 
-  const projectCollaborator = input.projectMembers.map((user: User) => {
-    return {
-      PutRequest: {
-        Item: {
-          project_id: { S: input.projectId },
-          project_member_address: { S: `USER#${user.wallet_address}` },
-          type: { S: "user" },
-          member_name: { S: user.employee_name },
-          member_role: {
-            S: "COLLABORATOR",
+  const projectCollaborator = input.projectMembers
+    .filter((user: User) => user.wallet_address !== input.session.address)
+    .map((user: User) => {
+      return {
+        PutRequest: {
+          Item: {
+            project_id: { S: input.projectId },
+            project_member_address: { S: `USER#${user.wallet_address}` },
+            type: { S: "user" },
+            member_name: { S: user.employee_name },
+            member_role: {
+              S: "COLLABORATOR",
+            },
           },
         },
-      },
-    };
-  });
+      };
+    });
   try {
     const post = new BatchWriteItemCommand({
       RequestItems: {
