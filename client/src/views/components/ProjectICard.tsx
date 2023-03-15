@@ -2,7 +2,6 @@
 import { css } from "@emotion/react";
 import HowToVoteIcon from "@mui/icons-material/HowToVote";
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
-import { useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -38,9 +37,7 @@ export default function ProjectCard(props: Props) {
         .then((file) => {
           let plainString = String(file);
           if (plainString.length > maxDetailsLength) {
-            plainString = plainString
-              .substring(0, maxDetailsLength)
-              .concat("...");
+            plainString = plainString.substring(0, maxDetailsLength);
           }
           setParsedMarkdown(plainString);
         });
@@ -54,7 +51,6 @@ export default function ProjectCard(props: Props) {
       });
     }
   }, [project, session]);
-  const theme = useTheme();
 
   return (
     <Card
@@ -107,7 +103,17 @@ export default function ProjectCard(props: Props) {
         >
           {shortenAddress(project.contract_address)}
         </Typography>
-        <Typography variant="body2">{parsedMarkdown}</Typography>
+        <Typography
+          variant="body2"
+          css={css`
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+          `}
+        >
+          {parsedMarkdown}
+        </Typography>
         <Stack
           direction="row"
           justifyContent={"space-between"}
