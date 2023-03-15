@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import grey from "@mui/material/colors/grey";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
@@ -12,7 +11,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getProjectByID, getProjectMembersByID } from "../../../api/project";
 import { Member, Project } from "../../../api/types/model";
 import { useSession } from "../../../auth/AuthContext";
-import { isProjectMember } from "../../../lib/utils/validator";
 import TabPanel from "../../components/atoms/TabPanel";
 import MainContainer from "../../components/MainContainer";
 import ProjectDetailsTab from "../../components/ProjectDetailsTab";
@@ -85,21 +83,6 @@ const ProjectDetails: React.FC = () => {
         >
           {project?.proposal?.title ?? "No Title"}
         </Typography>
-        {members && isProjectMember(members, session) && value === 0 && (
-          <Button
-            variant="contained"
-            size="small"
-            css={css`
-              height: 3rem;
-              margin-left: auto;
-            `}
-            onClick={() =>
-              navigate(`/project/details/${projectId}/create-outcome`)
-            }
-          >
-            Ready to post outcome?
-          </Button>
-        )}
       </div>
       <div>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>

@@ -14,6 +14,7 @@ import Typography from "@mui/material/Typography";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor, Viewer } from "@toast-ui/react-editor";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   CommentInput,
   createComment,
@@ -22,6 +23,7 @@ import {
 import { Comment, Member, Project } from "../../api/types/model";
 import { useSession } from "../../auth/AuthContext";
 import { formatIsoStringWithTime } from "../../lib/utils/format-util";
+import { isProjectMember } from "../../lib/utils/validator";
 import { useLoading } from "../../loading/LoadingContext";
 import { t3BalanceOf, voteT3Token } from "../../wallet/wallet-util";
 
@@ -36,6 +38,7 @@ const ProjectDetailsTab = (props: Props) => {
   const [votedT3Balance, setVotedT3Balance] = useState<number>(0);
   const contentsRef = useRef<Editor>(null);
   const { session } = useSession();
+  const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [myT3Balance, setMyT3Balance] = useState(0);
   const [voteTokenInput, setVoteTokenInput] = useState("");
@@ -239,15 +242,44 @@ const ProjectDetailsTab = (props: Props) => {
   return (
     <>
       <Box>
-        <Box>
-          <Button
-            variant="contained"
-            size="medium"
-            onClick={onSubmitVoteDialogOpen}
-          >
-            Vote
-          </Button>
-        </Box>
+        <div
+          css={css`
+            display: flex;
+          `}
+        >
+          {members && isProjectMember(members, session) ? (
+            <Button
+              variant="outlined"
+              fullWidth
+              css={css`
+                border-radius: 2rem;
+
+                height: 3rem;
+                margin-left: auto;
+              `}
+              onClick={() =>
+                navigate(
+                  `/project/details/${project?.project_id}/create-outcome`
+                )
+              }
+            >
+              Post Outcome
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              fullWidth
+              css={css`
+                border-radius: 2rem;
+                height: 3rem;
+                margin-left: auto;
+              `}
+              onClick={onSubmitVoteDialogOpen}
+            >
+              Vote
+            </Button>
+          )}
+        </div>
         <ProjectItem
           label="Members"
           value={members ? resolveProjectMembers(members) : "TBD"}
