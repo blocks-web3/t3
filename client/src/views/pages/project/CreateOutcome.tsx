@@ -2,10 +2,8 @@
 import { css } from "@emotion/react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import grey from "@mui/material/colors/grey";
 import FormLabel from "@mui/material/FormLabel";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -83,26 +81,10 @@ const CreateOutcome: React.FC = () => {
   }
 
   return (
-    <MainContainer>
-      <Typography
-        variant="h2"
-        noWrap
-        component="div"
-        css={css`
-          margin: 1rem auto;
-          text-align: center;
-        `}
-      >
-        Update Project Outcome
-      </Typography>
+    <MainContainer title="Update Project Outcome">
       <div
         css={css`
-          border: solid 1.5px;
-          border-radius: 10px;
-          border-color: ${grey[300]};
-          padding: 2rem;
-          justify-content: start;
-          display: flex;
+          margin-top: 2rem;
         `}
       >
         <Stack spacing={2}>
