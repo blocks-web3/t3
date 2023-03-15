@@ -1,7 +1,7 @@
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { deployGovernor, increaseBlock, ProposalState } from "./common";
+import { deployGovernor, increaseBlock, ProposalState, proposeOne } from "./common";
 
 describe("Project", function () {
   async function deployProject() {
@@ -107,10 +107,10 @@ describe("Project", function () {
       const projectAddress = await factory.projects(projectID);
       const project = await ethers.getContractAt("Project", projectAddress, owner);
 
-      // () is needed in solidity but not here
       const calldata = project.interface.encodeFunctionData("makeSucceeded()");
-      const description = "Propose for evaluating Project: " + projectID;
-      const descriptionHash = ethers.utils.id(description);
+      const descriptionHash = ethers.utils.id(
+        "Propose evaluating Project: " + projectID
+      );
       const proposalId = await governor.hashProposal(
         [project.address],
         [0],
@@ -120,8 +120,10 @@ describe("Project", function () {
 
       const tx = await governor.proposeProjectEvaluation(project.address, projectID);
       const receipt = await tx.wait();
+
       // ID calculated in solidity should be equal to here
       expect(proposalId).to.equal(receipt.events[0].args.proposalId);
+
       await increaseBlock();
 
       await governor.castVote(proposalId, 1);
@@ -146,6 +148,49 @@ describe("Project", function () {
 
       await governor["execute(uint256)"](proposalId);
       expect(await project.isSucceeded()).to.equal(true);
+    });
+
+    it("Create project via Proposal", async function () {
+      const { factory, owner, governor } = await loadFixture(deployProject);
+
+      const calldata = factory.interface.encodeFunctionData(
+        "createProject(string,string,uint256,uint256)",
+        [projectID, projectDescription, targetAmount, period]
+      );
+
+      const descriptionHash = ethers.utils.id("Propose creating Project: " + projectID);
+      const proposalId = await governor.hashProposal(
+        [factory.address],
+        [0],
+        [calldata],
+        descriptionHash
+      );
+
+      const tx = await governor.proposeProjectCreation(
+        factory.address,
+        projectID,
+        projectDescription,
+        targetAmount,
+        period
+      );
+      const receipt = await tx.wait();
+
+      // ID calculated in solidity should be equal to here
+      expect(proposalId).to.equal(receipt.events[0].args.proposalId);
+
+      await increaseBlock();
+      await governor.castVote(receipt.events[0].args.proposalId, 1);
+      await increaseBlock();
+
+      await governor["queue(uint256)"](proposalId);
+      await governor["execute(uint256)"](proposalId);
+
+      const projectAddress = await factory.projects(projectID);
+      const project = await ethers.getContractAt("Project", projectAddress, owner);
+
+      // even if created by proposal, the owner is the same
+      await project.makeComplete();
+      expect(await project.isComplete()).to.equal(true);
     });
   });
 });

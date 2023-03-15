@@ -1,11 +1,24 @@
 # Web3 dao tool
 
-## Deploy locally
+## Deploy
+
+- Local
 
 ```bash
-npx hardhat node
-npx hardhat run --network localhost scripts/deployT3Token.ts
-npx hardhat run --network localhost scripts/deployT3TimeCoin.ts
+$ npx hardhat node
+$ npx hardhat run --network localhost scripts/deploy.ts
+T3 time coin address: [ADDRESS_1]
+T3 token address: [ADDRESS_2]
+Timelock address [ADDRESS_3]
+Governor address [ADDRESS_4]
+Factory address [ADDRESS_5]
+```
+
+- testnet
+
+```bash
+$ npx hardhat run --network mumbai scripts/deploy.ts
+...
 ```
 
 ## Tasks

@@ -10,3 +10,4 @@ cache
 artifacts
 
 *.log
+input.json
