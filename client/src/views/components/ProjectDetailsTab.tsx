@@ -39,11 +39,11 @@ interface Props {
 const ProjectDetailsTab = (props: Props) => {
   const { project, members } = props;
   const [comments, setComments] = useState<Comment[]>([]);
-  const [votedT3Balance, setVotedT3Balance] = useState<number>(0);
   const contentsRef = useRef<Editor>(null);
   const { session } = useSession();
   const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [votedT3Balance, setVotedT3Balance] = useState(0);
   const [myT3Balance, setMyT3Balance] = useState(0);
   const [voteTokenInput, setVoteTokenInput] = useState("");
   const { setLoading } = useLoading();
