@@ -78,7 +78,7 @@ const CreatePost: React.FC = () => {
         session,
         projectId,
         data.requiredToken,
-        data.requiredTotalDays
+        26280000 // DeadLineの厳密な定義は現状しない。Astarベースで10年先のブロック数を登録
       );
       const input: PostProjectInput = {
         session: session,
