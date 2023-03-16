@@ -1,7 +1,7 @@
 import { KmsEthersSigner } from "aws-kms-ethers-signer";
 import BigNumber from "bignumber.js";
 import * as ethers from "ethers";
-import { formatEther } from "ethers/lib/utils";
+import { formatEther, parseEther } from "ethers/lib/utils";
 import { Session, StsCredentials } from "../auth/AuthContext";
 import { projectAbi, projectFactoryAbi, t3TokenAbi } from "./abis";
 
@@ -94,6 +94,13 @@ export async function voteT3Token(
   projectAddress: string,
   value: number
 ) {
+  const t3TokenContract = new ethers.Contract(
+    import.meta.env.VITE_T3_TOKEN_CONTRACT_ADDRESS,
+    t3TokenAbi,
+    getSigner(session)
+  );
+  const wei = parseEther(value.toString());
+  await t3TokenContract.approve(projectAddress, wei);
   const contract = new ethers.Contract(
     projectAddress,
     projectAbi,
@@ -101,7 +108,9 @@ export async function voteT3Token(
   );
 
   try {
-    await contract.support(value, { gasLimit: 100000 });
+    await contract.support(wei, {
+      gasLimit: 10000000,
+    });
   } catch (error) {
     console.error(error);
     throw error;
