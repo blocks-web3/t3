@@ -4,7 +4,7 @@
       "PutRequest": {
         "Item": {
           "wallet_address": {
-            "S": "0x0001"
+            "S": "0xBB18f3b625fa6C83C09974B22AdE2131365167E5"
           },
           "employee_id": {
             "S": "0101"
@@ -25,13 +25,70 @@
       "PutRequest": {
         "Item": {
           "wallet_address": {
-            "S": "0x0002"
+            "S": "0xa1966cfD37f761F796A85f2b27Df3fDFeb38CdA7"
           },
           "employee_id": {
             "S": "0102"
           },
           "employee_name": {
-            "S": "佐藤"
+            "S": "李"
+          },
+          "role": {
+            "S": "STAFF"
+          },
+          "department_name": {
+            "S": "G2"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "wallet_address": {
+            "S": "0x1e6F3Ad0004b894De164407334579a027bFe5c54"
+          },
+          "employee_id": {
+            "S": "0103"
+          },
+          "employee_name": {
+            "S": "菅原"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "wallet_address": {
+            "S": "0x3d91C68A4eF55D0539C3098D405657E759Ba601E"
+          },
+          "employee_id": {
+            "S": "0104"
+          },
+          "employee_name": {
+            "S": "井上"
+          },
+          "role": {
+            "S": "STAFF"
+          },
+          "department_name": {
+            "S": "G2"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "wallet_address": {
+            "S": "0xE6C88A179E6cf2196E51a001a72bD5f7c3B7E3D8"
+          },
+          "employee_id": {
+            "S": "0105"
+          },
+          "employee_name": {
+            "S": "三浦"
           },
           "role": {
             "S": "STAFF"

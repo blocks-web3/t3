@@ -4,15 +4,18 @@ import { CognitoAuthApi } from "../../../auth/auth-api";
 import { clearSession, useSession } from "../../../auth/AuthContext";
 import {
   displayEtherFromWei,
+  displayValue,
   etherToWei,
   getSigner,
   sendNativeToken,
+  t3BalanceOf,
 } from "../../../wallet/wallet-util";
 import { LoadingMask } from "../../components/LoadingMask";
 
 export default function Sample() {
   const { session } = useSession();
   const [balance, setBalance] = useState<BigNumber | null>();
+  const [t3Balance, setT3Balance] = useState<number | null>();
   const [gasPrice, setGasPrice] = useState<BigNumber | null>();
   const [inputToAddress, setInputToAddress] = useState<string>("");
   const [inputSendValue, setInputSendValue] = useState<string>("");
@@ -28,6 +31,12 @@ export default function Sample() {
     }
   }, [session]);
 
+  const getT3Balance = useCallback(async () => {
+    if (session) {
+      const num = await t3BalanceOf(session, session.address);
+      setT3Balance(num);
+    }
+  }, [session]);
   const getGasPrice = useCallback(async () => {
     if (session) {
       const num = await getSigner(session).getGasPrice();
@@ -49,11 +58,15 @@ export default function Sample() {
       console.log(response);
     }
   };
+  const reload = useCallback(() => {
+    getBalance();
+    getT3Balance();
+    getGasPrice();
+  }, [getBalance, getGasPrice, getT3Balance]);
 
   useEffect(() => {
-    getBalance();
-    getGasPrice();
-  }, [getBalance, getGasPrice]);
+    reload();
+  }, [reload]);
 
   if (!session) {
     return <LoadingMask></LoadingMask>;
@@ -64,13 +77,14 @@ export default function Sample() {
         <p>userId: {session?.userId}</p>
         <p>address: {session?.address}</p>
         <p>balance: {displayEtherFromWei(balance)}</p>
+        <p>t3Balance: {displayValue(t3Balance?.toString())}</p>
         <p>gasPrice: {displayEtherFromWei(gasPrice)}</p>
       </div>
       <div>
         <button onClick={onLogout}>logout</button>
       </div>
       <div>
-        <button onClick={getBalance}>getBalance</button>
+        <button onClick={reload}>reload</button>
       </div>
       <div>
         <form onSubmit={sendToken}>

@@ -11,7 +11,6 @@ import FormHelperText from "@mui/material/FormHelperText";
 import FormLabel from "@mui/material/FormLabel";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
 import { useEffect, useRef, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -24,6 +23,7 @@ import { useSession } from "../../../auth/AuthContext";
 import { useLoading } from "../../../loading/LoadingContext";
 import { createProjectContract } from "../../../wallet/wallet-util";
 import MainContainer from "../../components/MainContainer";
+import "../../css/toastui-editor.css";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
@@ -74,7 +74,12 @@ const CreatePost: React.FC = () => {
     const markdown = contentsRef.current?.getInstance().getMarkdown();
     try {
       const projectId = uuidv4();
-      const result = await createProjectContract(session, projectId, 123);
+      const result = await createProjectContract(
+        session,
+        projectId,
+        data.requiredToken,
+        data.requiredTotalDays
+      );
       const input: PostProjectInput = {
         session: session,
         title: data.title,
