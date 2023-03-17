@@ -1,4 +1,3 @@
-import amber from "@mui/material/colors/amber";
 import blue from "@mui/material/colors/blue";
 import lime from "@mui/material/colors/lime";
 import pink from "@mui/material/colors/pink";
@@ -67,13 +66,13 @@ export const resolveStatus = (status: string) => {
     case "PROPOSAL":
       return ["Proposing", blue[300]];
     case "VOTE":
-      return ["Accepting Vote", pink[300]];
+      return ["Accepting Vote", pink[200]];
     case "PROGRESS":
-      return ["On Going", amber[300]];
+      return ["On Going", blue[600]];
     case "EVALUATION":
-      return ["Evaluating", lime[300]];
+      return ["Evaluating", pink[600]];
     case "CLOSE":
-      return ["Closed", pink[900]];
+      return ["Closed", lime[700]];
     default:
       return ["", ""];
   }

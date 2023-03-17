@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { getProjects } from "../../../api/project";
 import { Project } from "../../../api/types/model";
-import ProjectCard from "../../components/ProjectICard";
+import ProjectCard from "../../components/ProjectCard";
 
 const statusValues = [
   { code: "PROPOSAL", label: "Proposing" },
@@ -39,7 +39,12 @@ const ProjectList: React.FC = () => {
 
   useEffect(() => {
     getProjects().then((projects) => {
-      return setProjects(projects);
+      const sorted = projects?.sort((a, b) =>
+        new Date(a.created_at).getTime() < new Date(b.created_at).getTime()
+          ? 1
+          : -1
+      );
+      setProjects(sorted);
     });
   }, []);
 

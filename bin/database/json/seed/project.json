@@ -3,17 +3,6 @@
     {
       "PutRequest": {
         "Item": {
-          "project_id": { "S": "2" },
-          "project_member_address": { "S": "USER#0x0002" },
-          "type": { "S": "user" },
-          "member_name": { "S": "佐藤" },
-          "member_role": { "S": "PROPOSER" }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
           "proposal": {
             "M": {
               "impl_period_to_date": { "S": "2023-03-19" },
@@ -33,14 +22,14 @@
           "project_member_address": {
             "S": "PJ#4b239d9b-be46-48f4-995e-d48b9579c7bb"
           },
-          "updated_at": { "S": "Wed, 15 Mar 2023 14:36:35 GMT" },
+          "updated_at": { "S": "Wed, 14 Mar 2023 14:36:35 GMT" },
           "project_id": { "S": "4b239d9b-be46-48f4-995e-d48b9579c7bb" },
-          "created_at": { "S": "Wed, 15 Mar 2023 14:36:35 GMT" },
+          "created_at": { "S": "Wed, 14 Mar 2023 14:36:35 GMT" },
           "type": { "S": "pj" },
           "contract_address": {
             "S": "0x1cf3A089dA7447E14B796884d77D9413d9de1a36"
           },
-          "status": { "S": "PROPOSAL" },
+          "status": { "S": "VOTE" },
           "quarter": { "S": "2023Q1" },
           "member_name": { "S": "" },
           "member_role": { "S": "" }
@@ -77,19 +66,6 @@
       "PutRequest": {
         "Item": {
           "project_member_address": {
-            "S": "USER#0xBB18f3b625fa6C83C09974B22AdE2131365167E5"
-          },
-          "project_id": { "S": "4b239d9b-be46-48f4-995e-d48b9579c7bb" },
-          "type": { "S": "user" },
-          "member_name": { "S": "後藤" },
-          "member_role": { "S": "COLLABORATOR" }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "project_member_address": {
             "S": "USER#0xa1966cfD37f761F796A85f2b27Df3fDFeb38CdA7"
           },
           "project_id": { "S": "4b239d9b-be46-48f4-995e-d48b9579c7bb" },
@@ -105,10 +81,134 @@
           "proposal": {
             "M": {
               "impl_period_to_date": { "S": "2023-03-19" },
+              "required_total_days": { "N": "10" },
+              "impl_period_from_date": { "S": "2023-03-10" },
+              "title": {
+                "S": "TOYOTA × 博報堂キースリー web3 Hackathonに参加します"
+              },
+              "content": {
+                "S": "## 背景\n\n[公式サイト](https://key3.co.jp/key3hackathon/)の通りWEB3をテーマにしたハッカソンが開催されます。\n参加メンバーが集まったのでSimplexからも参加したいと思います。\n\n![画像](http://localhost:5173/public/samples/web3hackathon.png)\n\n## 目的\n\nメンバーのスキルアップにつながります。取り組みの経過や・作成したプロダクト・結果のレポートを社内向けにプレゼンすることで外部テックイベントへの参加のムーブメントを作っていければと思っています。\nまた入賞すればWEB3領域の認知度向上にもつながります。\n\n## 施策\n\n| No | 取り組み |\n| --- | ---- |\n| 1 | ハッカソンのトピックに合わせたプロダクトを作成して、期限内に成果物を提出します。 |\n| 2 | 取り組みの経過や・作成したプロダクト・結果をまとめて社内に発表します。 |\n\n## 意気込み\n\n日々の業務やりながら時間を見つけて取り組もうと思ってるので、応援よろしくお願いします。"
+              },
+              "hiring_number": { "N": "3" },
+              "required_token_number": { "N": "20" }
+            }
+          },
+          "result": { "M": { "content": { "S": "" } } },
+          "project_member_address": {
+            "S": "PJ#01315a2d-1619-44f9-bbd7-515a91dd2515"
+          },
+          "updated_at": { "S": "Thu, 17 Mar 2023 15:30:11 GMT" },
+          "project_id": { "S": "01315a2d-1619-44f9-bbd7-515a91dd2515" },
+          "created_at": { "S": "Thu, 17 Mar 2023 15:30:11 GMT" },
+          "type": { "S": "pj" },
+          "contract_address": {
+            "S": "0xb544C7628B21133fa7197d692a13A9a4eB17Af26"
+          },
+          "status": { "S": "PROPOSAL" },
+          "quarter": { "S": "2023Q1" },
+          "member_name": { "S": "" },
+          "member_role": { "S": "" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "project_member_address": {
+            "S": "USER#0x3d91C68A4eF55D0539C3098D405657E759Ba601E"
+          },
+          "project_id": { "S": "01315a2d-1619-44f9-bbd7-515a91dd2515" },
+          "type": { "S": "user" },
+          "member_name": { "S": "井上" },
+          "member_role": { "S": "COLLABORATOR" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "project_member_address": {
+            "S": "USER#0xBB18f3b625fa6C83C09974B22AdE2131365167E5"
+          },
+          "project_id": { "S": "01315a2d-1619-44f9-bbd7-515a91dd2515" },
+          "type": { "S": "user" },
+          "member_name": { "S": "後藤" },
+          "member_role": { "S": "PROPOSER" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "proposal": {
+            "M": {
+              "impl_period_to_date": { "S": "2023-03-19" },
+              "required_total_days": { "N": "10" },
+              "impl_period_from_date": { "S": "2023-03-10" },
+              "title": {
+                "S": "TOYOTA × 博報堂キースリー web3 Hackathonに参加します"
+              },
+              "content": {
+                "S": "## 背景\n\n[公式サイト](https://key3.co.jp/key3hackathon/)の通りWEB3をテーマにしたハッカソンが開催されます。\n参加メンバーが集まったのでSimplexからも参加したいと思います。\n\n![画像](http://localhost:5173/public/samples/web3hackathon.png)\n\n## 目的\n\nメンバーのスキルアップにつながります。取り組みの経過や・作成したプロダクト・結果のレポートを社内向けにプレゼンすることで外部テックイベントへの参加のムーブメントを作っていければと思っています。\nまた入賞すればWEB3領域の認知度向上にもつながります。\n\n## 施策\n\n| No | 取り組み |\n| --- | ---- |\n| 1 | ハッカソンのトピックに合わせたプロダクトを作成して、期限内に成果物を提出します。 |\n| 2 | 取り組みの経過や・作成したプロダクト・結果をまとめて社内に発表します。 |\n\n## 意気込み\n\n日々の業務やりながら時間を見つけて取り組もうと思ってるので、応援よろしくお願いします。"
+              },
+              "hiring_number": { "N": "3" },
+              "required_token_number": { "N": "20" }
+            }
+          },
+          "result": { "M": { "content": { "S": "" } } },
+          "project_member_address": {
+            "S": "PJ#8dbd48dc-b39d-4964-9b45-c71f0af14c47"
+          },
+          "updated_at": { "S": "Thu, 14 Mar 2023 15:28:37 GMT" },
+          "project_id": { "S": "8dbd48dc-b39d-4964-9b45-c71f0af14c47" },
+          "created_at": { "S": "Thu, 14 Mar 2023 15:28:37 GMT" },
+          "type": { "S": "pj" },
+          "contract_address": {
+            "S": "0x6a51C8db3305Aa5Af115130696c62a9438E4757C"
+          },
+          "status": { "S": "EVALUATION" },
+          "quarter": { "S": "2023Q1" },
+          "member_name": { "S": "" },
+          "member_role": { "S": "" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "project_member_address": {
+            "S": "USER#0x3d91C68A4eF55D0539C3098D405657E759Ba601E"
+          },
+          "project_id": { "S": "8dbd48dc-b39d-4964-9b45-c71f0af14c47" },
+          "type": { "S": "user" },
+          "member_name": { "S": "井上" },
+          "member_role": { "S": "COLLABORATOR" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "project_member_address": {
+            "S": "USER#0xBB18f3b625fa6C83C09974B22AdE2131365167E5"
+          },
+          "project_id": { "S": "8dbd48dc-b39d-4964-9b45-c71f0af14c47" },
+          "type": { "S": "user" },
+          "member_name": { "S": "後藤" },
+          "member_role": { "S": "PROPOSER" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "proposal": {
+            "M": {
+              "impl_period_to_date": { "S": "2023-03-19" },
               "required_total_days": { "N": "40" },
               "impl_period_from_date": { "S": "2023-03-10" },
               "title": {
-                "S": "MareプロジェクトのCDKのインナーソース化と社内展開"
+                "S": "T3プロジェクトのCDKのインナーソース化と社内展開"
               },
               "content": {
                 "S": "## 背景・目的\n\n効率化とナレッジトランスファーを進めるためにMareプロジェクトで作成しているCDKソースを\nインナーソース化していろんなプロジェクトに使ってもらえるようにしたいです！\n\n## 施策\n\n事前のヒアリング結果からCognito SSO認証とEC2日次起動停止Lambdaに需要がありそうなことがわかっているので、\n上記を重点的に拡充して、Darwin/Dawkins/Hawking/Albertプロジェクトに実際に横展開します。\n\n| 対象プロジェクト | 要望 |\n| -------- | --- |\n| Darwin | ★Cognito SSO認証 |\n| Dawkins | IAMロールの本番アクセス申請の自動化<br>★Cognito SSO認証 |\n| Hawking | ★EC2日次起動停止Lambda |\n| *Albert* | ★EC2日次起動停止Lambda |\n\n## 意気込み\n\n応援お願いします！！"
@@ -145,6 +245,231 @@
           "type": { "S": "user" },
           "member_name": { "S": "後藤" },
           "member_role": { "S": "PROPOSER" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "proposal": {
+            "M": {
+              "impl_period_to_date": { "S": "2023-03-19" },
+              "required_total_days": { "N": "15" },
+              "impl_period_from_date": { "S": "2023-03-10" },
+              "title": {
+                "S": "Amazon Managed Blockchain で DAO ツールを構築する"
+              },
+              "content": {
+                "S": "# はじめに\n\n今回はAmazon Manged Blockchain サービスを利用して、TOYOTA 社内で活用される DAO ツールを作ってみました。\nAmazon Managed Blockchain サービスは、Ethereum や Hyperledger Fabric を構成してくれるマネージドサービスです。自前で EC2 で構成する時と比べて、数クリックで Node を含めた環境が出来上がるので、自分たちのアプリケーションの制作に時間を費やすことができます。\n今回は、Ethereum のブロックチェーンをプライベートに構築するところまでをプロジェクトとして提案します。\n\n# Ethereum Node 作成\n\nまず、Amazon Managed Blockchain のサービスページに移動して、Join public network を選択します。\n4つのネットワークから選択できます。今回はテスト用なので、Goerli を選んでみます。AWS Document に、Goerli テスト用途としておすすめと書かれていたので、これを選びます。Mainnet は、実際にお金が掛かる本番用ネットワークなので、動作確認は Testnet を利用すると良いです。\nURL : [https://docs.aws.amazon.com/ja_jp/managed-blockchain/latest/ethereum-dev/ethereum-nodes.html](https://docs.aws.amazon.com/ja_jp/managed-blockchain/latest/ethereum-dev/ethereum-nodes.html)\n\n# アプリケーションから Ethereum Node の API を呼びだす\n\nEthereum Node が作成できたので、アプリケーションから API を呼びだしてみます。\nWeb3.jsは、Nodeパッケージマネージャ (npm) で利用可能な JavaScript ライブラリです。以下の例を実行すると、Node.js 用の Javascript ファイルを使用して、Ethereum に JSON-RPC API 呼び出しを送信することができます。この例では、Ethereum ノードへの HTTP 接続と WebSocket 接続を行います。\nEC2 インスタンス上で、Ethereum Node にアクセスする構成を確認します。構成図でみるとこんな感じです。Amazon Managed Blockchain サービスを使って、Goerli ネットワークに参加している Ethereum Full Node を作成しました。この Node はエンドポイントを持っているので、EC2 インスタンスの Node.js アプリから API を実行してみます。\n\nEC2 インスタンスにインストールされている Node のバージョンを確認します。存在しない場合はインストールをしてください。\n\n```\n> node --version\nv16.13.0\n```\n\n参考：[https://qiita.com/sugimount-a/items/8bb29df758a741b2cfe7](https://qiita.com/sugimount-a/items/8bb29df758a741b2cfe7)\n\n# 意気込み\n\nEthereum をはじめとしたブロックチェーンに触ること自体初めてですが、社内のコミュニティ活性に繋がればと考えております。\nぜひ投票のほど、よろしくお願いします。"
+              },
+              "hiring_number": { "N": "3" },
+              "required_token_number": { "N": "30" }
+            }
+          },
+          "result": { "M": { "content": { "S": "" } } },
+          "project_member_address": {
+            "S": "PJ#3740ec6c-d570-4096-ad99-879bc74a8d12"
+          },
+          "updated_at": { "S": "Thu, 16 Mar 2023 13:55:34 GMT" },
+          "project_id": { "S": "3740ec6c-d570-4096-ad99-879bc74a8d12" },
+          "created_at": { "S": "Thu, 16 Mar 2023 13:55:34 GMT" },
+          "type": { "S": "pj" },
+          "contract_address": {
+            "S": "0x1832165B45b6008fA36c81a7AE24Dd5576477883"
+          },
+          "status": { "S": "PROPOSAL" },
+          "quarter": { "S": "2023Q1" },
+          "member_name": { "S": "" },
+          "member_role": { "S": "" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "project_member_address": {
+            "S": "USER#0x3d91C68A4eF55D0539C3098D405657E759Ba601E"
+          },
+          "project_id": { "S": "3740ec6c-d570-4096-ad99-879bc74a8d12" },
+          "type": { "S": "user" },
+          "member_name": { "S": "井上" },
+          "member_role": { "S": "COLLABORATOR" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "project_member_address": {
+            "S": "USER#0xBB18f3b625fa6C83C09974B22AdE2131365167E5"
+          },
+          "project_id": { "S": "3740ec6c-d570-4096-ad99-879bc74a8d12" },
+          "type": { "S": "user" },
+          "member_name": { "S": "後藤" },
+          "member_role": { "S": "PROPOSER" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "project_member_address": {
+            "S": "USER#0xa1966cfD37f761F796A85f2b27Df3fDFeb38CdA7"
+          },
+          "project_id": { "S": "3740ec6c-d570-4096-ad99-879bc74a8d12" },
+          "type": { "S": "user" },
+          "member_name": { "S": "李" },
+          "member_role": { "S": "COLLABORATOR" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "proposal": {
+            "M": {
+              "impl_period_to_date": { "S": "2023-03-19" },
+              "required_total_days": { "N": "40" },
+              "impl_period_from_date": { "S": "2023-03-10" },
+              "title": {
+                "S": "ERC20、ガバナンストークン、ECR721を融合させたコントラクトによるDAOツールの実現"
+              },
+              "content": {
+                "S": "# はじめに\n\nコミュニティの活性化にはインセンティブ設計が非常に重要となります。そのインセンティブを付与するのが、トークンですが、スマートコントラクト上で発行できるトークンには様々あります。\n特に今回は、FT による独自トークンへの意味づけ、コミュニティ・ガバナンスのためのガバナンストークン、貢献に対する価値としての NFT 付与を全て取り入れたコントラクトを設計・開発します。\n\n# ECR20トークンとは\n\nまずERC-20とは、イーサリアムブロックチェーンと互換性を持つ仮想通貨をつくることができる共通規格のことです。\n\nまた、**例えばステーブルコインのテザー（USDT）や分散型プラットフォームのユーティリティトークンであるPolygon（MATIC）など、その共通規格でつくられたものをERC-20トークンと総称しています。**\n\n**開発が比較的容易であることや利便性の高さから、ERC-20トークンは仮想通貨業界の幅広い領域で活用されており、国内取引所でも多くのERC-20トークンが取引されています。**\n\nURL : [https://fisco.jp/media/erc-20/](https://fisco.jp/media/erc-20/)\n\n# ガバナンストークンとは\n\nガバナンストークンとは、ブロックチェーン上のプロジェクトやネットワークのルールなど運営に参加できるトークンのことです。\nガバナンストークンは他に、プロジェクトに関する特典を受けられる場合もありますが、一部の大量保有者が権力を強めてしまう可能性もあります。\n\nURL : [https://www.for-it.co.jp/mediverse/cryptocurrency/governance-token](https://www.for-it.co.jp/mediverse/cryptocurrency/governance-token)\n\n# NFTとは\n\nNFT（Non-Fungible Token）とは、「**代替不可能なトークン**」という意味をもつ言葉です。\n偽造や改ざんが難しい[ブロックチェーン技術](https://www.bridge-salon.jp/toushi/blockchain/)によって、**デジタルデータに固有の価値がつくようになりました**。\n\nURL : [https://www.bridge-salon.jp/toushi/nft/#back](https://www.bridge-salon.jp/toushi/nft/#back)\n\n# 意気込み\n\nTOYOTA初の試みになると思います！ぜひ投票をお願いします！"
+              },
+              "hiring_number": { "N": "3" },
+              "required_token_number": { "N": "100" }
+            }
+          },
+          "result": { "M": { "content": { "S": "" } } },
+          "project_member_address": {
+            "S": "PJ#9a7fbcc7-7a0e-47a1-908e-5e6f8933cf59"
+          },
+          "updated_at": { "S": "Thu, 16 Mar 2023 14:40:14 GMT" },
+          "project_id": { "S": "9a7fbcc7-7a0e-47a1-908e-5e6f8933cf59" },
+          "created_at": { "S": "Thu, 16 Mar 2023 14:40:14 GMT" },
+          "type": { "S": "pj" },
+          "contract_address": {
+            "S": "0x888efd3a311587cC68CBC1727cab8CEA28178304"
+          },
+          "status": { "S": "PROPOSAL" },
+          "quarter": { "S": "2023Q1" },
+          "member_name": { "S": "" },
+          "member_role": { "S": "" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "project_member_address": {
+            "S": "USER#0x3d91C68A4eF55D0539C3098D405657E759Ba601E"
+          },
+          "project_id": { "S": "9a7fbcc7-7a0e-47a1-908e-5e6f8933cf59" },
+          "type": { "S": "user" },
+          "member_name": { "S": "井上" },
+          "member_role": { "S": "COLLABORATOR" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "project_member_address": {
+            "S": "USER#0xBB18f3b625fa6C83C09974B22AdE2131365167E5"
+          },
+          "project_id": { "S": "9a7fbcc7-7a0e-47a1-908e-5e6f8933cf59" },
+          "type": { "S": "user" },
+          "member_name": { "S": "後藤" },
+          "member_role": { "S": "PROPOSER" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "project_member_address": {
+            "S": "USER#0xa1966cfD37f761F796A85f2b27Df3fDFeb38CdA7"
+          },
+          "project_id": { "S": "9a7fbcc7-7a0e-47a1-908e-5e6f8933cf59" },
+          "type": { "S": "user" },
+          "member_name": { "S": "李" },
+          "member_role": { "S": "COLLABORATOR" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "proposal": {
+            "M": {
+              "impl_period_to_date": { "S": "2023-03-19" },
+              "required_total_days": { "N": "40" },
+              "impl_period_from_date": { "S": "2023-03-10" },
+              "title": {
+                "S": "Hyperledger Fabric を用いたサプライチェーンマネジメントと DAO ツールの融合の検討と実証実験"
+              },
+              "content": {
+                "S": "# はじめに\n\nHyperledger Fabric を活用して、コンソーシアム型のブロックチェーン形成を行い、TOYOTA子会社を含めたサプライチェーンマネジメントを検討しています。その中で、請負契約の健全化や品質向上のために DAO ツールの組み込みを検討しています。\n今回提案するプロジェクトでは、そのような Hyperledger Fabric ベースのコントラクトエコシステムに対して、どのような DAO ツールの可能性があるのかの検討と、その実現方法について実証実験を行います。\n\n# Ethereum Node 作成\n\nまず、Amazon Managed Blockchain のサービスページに移動して、Join public network を選択します。\n4 つのネットワークから選択できます。今回はテスト用なので、Goerli を選んでみます。AWS Document に、Goerli テスト用途としておすすめと書かれていたので、これを選びます。Mainnet は、実際にお金が掛かる本番用ネットワークなので、動作確認は Testnet を利用すると良いです。\nURL : [https://docs.aws.amazon.com/ja_jp/managed-blockchain/latest/ethereum-dev/ethereum-nodes.html](https://docs.aws.amazon.com/ja_jp/managed-blockchain/latest/ethereum-dev/ethereum-nodes.html)\n\n# アプリケーションから Ethereum Node の API を呼びだす\n\nEthereum Node が作成できたので、アプリケーションから API を呼びだしてみます。\nWeb3.js は、Node パッケージマネージャ (npm) で利用可能な JavaScript ライブラリです。以下の例を実行すると、Node.js 用の Javascript ファイルを使用して、Ethereum に JSON-RPC API 呼び出しを送信することができます。この例では、Ethereum ノードへの HTTP 接続と WebSocket 接続を行います。\nEC2 インスタンス上で、Ethereum Node にアクセスする構成を確認します。構成図でみるとこんな感じです。Amazon Managed Blockchain サービスを使って、Goerli ネットワークに参加している Ethereum Full Node を作成しました。この Node はエンドポイントを持っているので、EC2 インスタンスの Node.js アプリから API を実行してみます。\n\nEC2 インスタンスにインストールされている Node のバージョンを確認します。存在しない場合はインストールをしてください。\n\n```\n> node --version\nv16.13.0\n```\n\n参考：[https://qiita.com/sugimount-a/items/8bb29df758a741b2cfe7](https://qiita.com/sugimount-a/items/8bb29df758a741b2cfe7)\n\n# 意気込み\n\nEthereum をはじめとしたブロックチェーンに触ること自体初めてですが、社内のコミュニティ活性に繋がればと考えております。\nぜひ投票のほど、よろしくお願いします。"
+              },
+              "hiring_number": { "N": "3" },
+              "required_token_number": { "N": "70" }
+            }
+          },
+          "result": { "M": { "content": { "S": "" } } },
+          "project_member_address": {
+            "S": "PJ#e0799ba7-165f-4ede-96f1-90d388feced1"
+          },
+          "updated_at": { "S": "Thu, 16 Mar 2023 15:03:25 GMT" },
+          "project_id": { "S": "e0799ba7-165f-4ede-96f1-90d388feced1" },
+          "created_at": { "S": "Thu, 16 Mar 2023 15:03:25 GMT" },
+          "type": { "S": "pj" },
+          "contract_address": {
+            "S": "0x52472078AD539621CA127a3243Eb4455a6bA38b1"
+          },
+          "status": { "S": "PROGRESS" },
+          "quarter": { "S": "2023Q1" },
+          "member_name": { "S": "" },
+          "member_role": { "S": "" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "project_member_address": {
+            "S": "USER#0x3d91C68A4eF55D0539C3098D405657E759Ba601E"
+          },
+          "project_id": { "S": "e0799ba7-165f-4ede-96f1-90d388feced1" },
+          "type": { "S": "user" },
+          "member_name": { "S": "井上" },
+          "member_role": { "S": "COLLABORATOR" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "project_member_address": {
+            "S": "USER#0xBB18f3b625fa6C83C09974B22AdE2131365167E5"
+          },
+          "project_id": { "S": "e0799ba7-165f-4ede-96f1-90d388feced1" },
+          "type": { "S": "user" },
+          "member_name": { "S": "後藤" },
+          "member_role": { "S": "PROPOSER" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "project_member_address": {
+            "S": "USER#0xa1966cfD37f761F796A85f2b27Df3fDFeb38CdA7"
+          },
+          "project_id": { "S": "e0799ba7-165f-4ede-96f1-90d388feced1" },
+          "type": { "S": "user" },
+          "member_name": { "S": "李" },
+          "member_role": { "S": "COLLABORATOR" }
         }
       }
     }
