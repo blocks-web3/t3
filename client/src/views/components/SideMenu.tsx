@@ -112,7 +112,21 @@ export default function SideMenu(props: Props) {
         text-align: center;
       `}
     >
-      <Toolbar sx={{ minHeight: { sm: "96px" } }} />
+      <Toolbar
+        sx={{
+          alignItems: "center",
+          display: "flex",
+          justifyContent: "center",
+          minHeight: { sm: "96px" },
+        }}
+      >
+        <img
+          css={css`
+            height: 96px;
+          `}
+          src="../../../public/logo.svg"
+        ></img>
+      </Toolbar>
       <Divider />
       <Button
         variant="contained"
